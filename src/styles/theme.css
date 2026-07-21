@@ -1,5 +1,54 @@
-@theme {
-  --font-sans: ;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-  --color-primary: ;
+@theme {
+  /* ------- FONTS -------- */
+  --font-sans: "Poppins", sans-serif;
+  --font-weight-bold: 700;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+
+  /* ------- BRAND COLORS -------- */
+  --color-primary: #7e3af2;
+  --color-primary-hover: #6d28d9;
+  --color-purple-text: #7f5ab5;
+  --color-icon-purple: #5c45a4;
+
+  /* ------- BACKGROUND COLORS -------- */
+  --color-main-bg: #e5e5f8;
+  --color-second-bg: #fff;
+
+  /* ------- BUTTONS COLORS -------- */
+  --color-auth: linear-gradient(135deg, #4b1e8a 0%, #8e52dc 100%);
+  --main-button: #6620f3;
+  --color-boarder: linear-gradient(
+    135deg,
+    #8a2be2 0%,
+    #a558ef 50%,
+    rgba(99, 107, 241, 0.6) 100%
+  );
+
+  /* ------- TEXT & TITLE COLORS -------- */
+  --color-motaweer: #070d2d;
+  --color-text-main: #111827;
+  --color-text-muted: #33373e;
+  --color-placeholder: #a9a9a9;
+
+  /* ------- INPUT FIELDS STYLING -------- */
+  --color-input-bg: #e5e5f8;
+  --color-input-border: #d1d5db;
+  --color-input-message: #efeff1;
+  --color-card-comments: #faf5f5;
+
+  /* ------- ROLE OPTIONS COLORS -------- */
+  --color-option-developer: #502290;
+  --color-option-company: #38ffff;
+  --color-option-client: #61a343;
+
+  /* ------- SHADOWS -------- */
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.06);
+  --shadow-button: 0 4px 14px rgba(126, 58, 242, 0.35);
+
+  /* ------- BORDER RADIUS -------- */
+  --radius-card: 1.5rem;
+  --radius-input: 1rem;
 }
