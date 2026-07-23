@@ -39,6 +39,8 @@
 
 - import this server in the api folder when you use it
 
+## 10- Zustand => npm install zustand
+
 ## Requirements :
 
 - Node.js 22.20.0

@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import LoginPage from "./features/auth/pages/LoginPage.tsx";
+import { InputField } from "./features/auth/components/ui/InputField";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <LoginPage />
+    <InputField />
   </StrictMode>
 );

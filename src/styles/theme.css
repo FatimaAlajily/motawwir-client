@@ -20,8 +20,9 @@
   --color-main-bg: #e5e5f8;
   --color-second-bg: #fff;
 
-  /* ------- BUTTONS COLORS -------- */
-  --color-auth: linear-gradient(135deg, #4b1e8a 0%, #8e52dc 100%);
+  /* --color-auth: linear-gradient(135deg, #4b1e8a 0%, #8e52dc 100%); */
+  /* --color-auth-hover: linear-gradient(135deg, #4b1e8a 0%, #8e52dc 100%); */
+
   --main-button: #6620f3;
   --color-boarder: linear-gradient(
     135deg,
@@ -54,4 +55,9 @@
   /* ------- BORDER RADIUS -------- */
   --radius-card: 1.5rem;
   --radius-input: 1rem;
+}
+
+/* ------- BUTTONS COLORS -------- */
+@utility bg-auth {
+  background-image: linear-gradient(135deg, #4b1e8a 0%, #8e52dc 100%);
 }

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { User } from "../types/user/User";
 import type { Login } from "../types/user/Login";
 import { loginRequest } from "../api/AuthApi";
+import { useAuthStore } from "../store/useAuthStore";
 
 const useLogin = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const setUser = useAuthStore((state) => state.setUser);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -23,7 +23,6 @@ const useLogin = () => {
     return response;
   }
   return {
-    user,
     loading,
     error,
     handleLogin,
