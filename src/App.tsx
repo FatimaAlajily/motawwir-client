@@ -1,10 +1,11 @@
-import { Button } from "flowbite-react";
+import { Route, Routes } from "react-router-dom";
+import LoginPage from "./features/auth/pages/LoginPage";
 
 const App = () => {
   return (
-    <div>
-      <Button>Click me</Button>
-    </div>
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+    </Routes>
   );
 };
 

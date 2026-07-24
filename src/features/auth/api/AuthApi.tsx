@@ -9,7 +9,7 @@ import { HandleApiError } from "../../../shared/api/HandleApiError";
 export async function loginRequest(payload: Login): Promise<ApiResponse<User>> {
   try {
     const response = await axiosClient.post<ApiSuccess<User>>(
-      "api/auth/login",
+      "auth/login",
       payload
     );
     return response.data;
@@ -23,7 +23,7 @@ export async function registerRequest(
 ): Promise<ApiResponse<User>> {
   try {
     const response = await axiosClient.post<ApiSuccess<User>>(
-      "/api/auth/register",
+      "auth/register",
       payload
     );
     return response.data;
@@ -33,7 +33,7 @@ export async function registerRequest(
 }
 export async function logoutRequest(): Promise<ApiResponse<null>> {
   try {
-    const response = await axiosClient.post<ApiSuccess<null>>("api/logout");
+    const response = await axiosClient.post<ApiSuccess<null>>("logout");
     return response.data;
   } catch (error) {
     return HandleApiError(error);

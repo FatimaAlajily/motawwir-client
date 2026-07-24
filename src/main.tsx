@@ -1,10 +1,13 @@
 import { StrictMode } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { InputField } from "./features/auth/components/ui/InputField";
+import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <InputField />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>
 );
