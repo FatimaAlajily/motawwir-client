@@ -3,26 +3,27 @@ import { SideBar } from "../shared/components/common/SideBar";
 
 const Dashbord = () => {
   return (
-    <div className="flex min-h-screen bg-gray-50 rtl">
-      {/* ---------- SideBar Mnue ---------- */}
-      <aside className="sticky top-0 h-screen shrink-0">
-        <SideBar />
-      </aside>
-
+    <div className="min-h-screen bg-gray-50 rtl flex flex-col">
       {/* ---------- NavBar Header --------- */}
 
-      <div className="flex flex-col flex-1 min-w-0">
-        <header className="sticky top-0 z-40">
+      <div className="">
+        <header className=" top-0 z-20">
           <NavBar />
         </header>
 
-        {/* ---------- Main Content --------- */}
+        {/* ---------- SideBar Mnue ---------- */}
+        <div className="flex flex-1">
+          <aside className="sticky top-16 h-[calc(100vh-80px) mt-4">
+            <SideBar />
+          </aside>
 
-        <main className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            مرحباً بك في منتدى المبرمجين
-          </h1>
-        </main>
+          {/* ---------- Main Content --------- */}
+          <main className="flex-1 p-6">
+            <h1 className="text-2xl font-bold text-gray-800">
+              مرحباً بك في منتدى المبرمجين
+            </h1>
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -2,10 +2,11 @@
 
 import SearchBar from "./SearchBar";
 import CreateButton from "./CreateButton";
-import { Navbar } from "flowbite-react";
+import { Navbar, NavbarBrand } from "flowbite-react";
 import NotificationBar from "./NotificationBar";
 import AvatarBar from "./AvatarBar";
-// import SideBarIcons from "../common/SideBarIcons";
+
+import motawwerLogo from "../../../assets/images/Logo.png";
 
 export function NavBar() {
   return (
@@ -14,6 +15,19 @@ export function NavBar() {
       rounded
       className="bg-white px-6 py-3 shadow-sm border-b border-gray-100"
     >
+      <NavbarBrand>
+        <img
+          src={motawwerLogo}
+          className="mr-3 h-6 sm:h-9"
+          alt="Flowbite React Logo"
+        />
+        <span
+          className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white"
+          style={{ fontFamily: '"Reem Kufi", sans-serif' }}
+        >
+          مطور
+        </span>
+      </NavbarBrand>
       {/* -------- Middle Sectuion Search ---------- */}
       <SearchBar />
 

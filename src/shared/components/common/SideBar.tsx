@@ -19,30 +19,15 @@ import {
   LogOut,
 } from "lucide-react";
 
-import Logo from "../../../assets/images/Logo.png";
 import SideBarIcons from "../common/SideBarIcons";
 export function SideBar() {
   return (
     <Sidebar
       aria-label="نافذة الاقسام"
-      className="bg-white [&>div]:bg-white [&>div]:border-none rounded-l-2xl min-h-screen py-4 shadow-sm"
+      className="bg-white [&>div]:bg-white [&>div]:border-none rounded-l-2xl min-h-screen pt-10 pb-4 shadow-sm"
     >
-      {/* ---------- Motawwer */}
-      <div className="flex items-center gap-3 px-4 mb-6">
-        <img
-          src={Logo}
-          alt="Motaweer Logo"
-          className="w-[38] h-[33] object-contain"
-        />
-        <span
-          className="text-xl font-bold text-gray-900"
-          style={{ fontFamily: '"Reem Kufi", sans-serif' }}
-        >
-          مطور
-        </span>
-      </div>
       <SidebarItems>
-        <SidebarItemGroup className="space-y-1.5">
+        <SidebarItemGroup className="space-y-1.5 mt-6">
           <SidebarItem
             href="#"
             icon={() => (

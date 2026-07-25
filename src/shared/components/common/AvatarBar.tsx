@@ -6,7 +6,10 @@ import {
   DropdownItem,
 } from "flowbite-react";
 
+import { useAuthStore } from "../../../features/auth/store/useAuthStore";
+
 const AvatarBar = () => {
+  const user = useAuthStore((state) => state.user);
   return (
     <Dropdown
       arrowIcon={false}
@@ -14,8 +17,8 @@ const AvatarBar = () => {
       label={
         <div className="relative">
           <Avatar
-            alt="User settings"
-            img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+            alt="حساب المستخدم"
+            img={user?.avatar}
             rounded
             className="ring-1 rounded-full ring-[#5C45A4]"
           />
@@ -25,10 +28,10 @@ const AvatarBar = () => {
       }
     >
       <DropdownHeader>
-        <span className="block text-sm font-bold">Fatima Salih</span>
+        <span className="block text-sm font-bold">{user?.user_name}</span>
 
         <span className="block truncate text-sm font-medium text-gray-500">
-          fatima@gmail.com
+          {user?.email}
         </span>
       </DropdownHeader>
 
