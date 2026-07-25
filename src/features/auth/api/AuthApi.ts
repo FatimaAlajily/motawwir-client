@@ -6,6 +6,15 @@ import type { ApiResponse } from "../types/response/ApiResponse";
 import type { ApiSuccess } from "../types/response/ApiSuccess";
 import { HandleApiError } from "../../../shared/api/HandleApiError";
 
+export async function userRequest(): Promise<ApiResponse<User>> {
+  try {
+    const response = await axiosClient.get<ApiSuccess<User>>("user");
+    return response.data;
+  } catch (error) {
+    return HandleApiError(error);
+  }
+}
+
 export async function loginRequest(payload: Login): Promise<ApiResponse<User>> {
   try {
     const response = await axiosClient.post<ApiSuccess<User>>(

@@ -24,7 +24,7 @@ export function SideBar() {
   return (
     <Sidebar
       aria-label="نافذة الاقسام"
-      className="bg-white [&>div]:bg-white [&>div]:border-none rounded-l-2xl min-h-screen pt-10 pb-4 shadow-sm"
+      className="bg-white [&>div]:bg-white [&>div]:border-none rounded-l-2xl min-h-screen pt-1 pb-4 shadow-sm"
     >
       <SidebarItems>
         <SidebarItemGroup className="space-y-1.5 mt-6">
