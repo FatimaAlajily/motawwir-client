@@ -59,7 +59,7 @@ const LoginForm = () => {
       setAttempts(newAttempts);
 
       if (newAttempts >= 3) {
-        const lockoutTime = Date.now() + 60 * 1000; // دقيقة واحدة
+        const lockoutTime = Date.now() + 60 * 1000;
         setLockout(lockoutTime);
         setTime(60);
       }
