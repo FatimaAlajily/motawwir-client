@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { CreateNewPayload } from "../types/CreatePostPayload";
-import { FileDropInput } from "./FileDropInput";
-import { FormInput } from "./FormInput";
+import type { CreateNewPayload } from "../../types/common/CreatePostPayload";
+import { FileDropInput } from "../forms/FileDropInput";
+import { FormInput } from "../forms/FormInput";
 
 type NewFormProps = {
   onSubmit: (payload: CreateNewPayload) => void;

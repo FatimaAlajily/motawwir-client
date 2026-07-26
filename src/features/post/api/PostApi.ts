@@ -1,13 +1,13 @@
 import axiosClient from "../../../shared/api/ClientApi";
-import type { PostType } from "../types/PostType";
-import type { PostPagination } from "../types/PostPagination";
-import type { Post } from "../types/Post";
+import type { PostType } from "../types/common/PostType";
+import type { PostPagination } from "../types/forms/PostPagination";
+import type { Post } from "../types/common/Post";
 import { HandleApiError } from "../../../shared/api/HandleApiError";
 import type { ApiSuccess } from "../../auth/types/response/ApiSuccess";
 import type {
   CreatePostPayload,
   UpdatePostPayload,
-} from "../types/CreatePostPayload";
+} from "../types/common/CreatePostPayload";
 import type { ApiResponse } from "../../auth/types/response/ApiResponse";
 
 function buildPostFormData(

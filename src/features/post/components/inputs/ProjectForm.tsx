@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { CreateProjectPayload } from "../types/CreatePostPayload";
-import { FormInput } from "./FormInput";
-import { FormTextarea } from "./FormTextarea";
-import { SkillsInput } from "./SkillsInput";
-import { FileDropInput } from "./FileDropInput";
+import type { CreateProjectPayload } from "../../types/common/CreatePostPayload";
+import { FormInput } from "../forms/FormInput";
+import { FormTextarea } from "../forms/FormTextarea";
+import { SkillsInput } from "../forms/SkillsInput";
+import { FileDropInput } from "../forms/FileDropInput";
 
 type ProjectFormProps = {
   onSubmit: (payload: CreateProjectPayload) => void;
@@ -20,7 +20,7 @@ const ProjectForm = ({ onSubmit, loading }: ProjectFormProps) => {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!file) return; // الملف إجباري لهذا النوع (required_unless: question, work, team)
+    if (!file) return;
 
     onSubmit({
       type: "project",
@@ -52,13 +52,13 @@ const ProjectForm = ({ onSubmit, loading }: ProjectFormProps) => {
       />
 
       <SkillsInput
-        label="التقنيات / المهارات المستخدمة"
+        label="التقنيات , المهارات المستخدمة"
         value={skill}
         onChange={setSkill}
       />
 
       <FormInput
-        label="الرابط الرئيسي (مثل GitHub أو الموقع)"
+        label="الرابط الرئيسي (GitHub)"
         value={primaryLink}
         onChange={setPrimaryLink}
         placeholder="https://..."
@@ -67,7 +67,7 @@ const ProjectForm = ({ onSubmit, loading }: ProjectFormProps) => {
       />
 
       <FormInput
-        label="رابط إضافي (اختياري)"
+        label="رابط إضافي (Domain)"
         value={secondaryLink}
         onChange={setSecondaryLink}
         placeholder="https://..."

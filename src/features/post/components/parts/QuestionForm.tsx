@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { CreateQuestionPayload } from "../types/CreatePostPayload";
-import { FormTextarea } from "./FormTextarea";
-import { FormInput } from "./FormInput";
+import type { CreateQuestionPayload } from "../../types/common/CreatePostPayload";
+import { FormTextarea } from "../forms/FormTextarea";
+import { FormInput } from "../forms/FormInput";
 
 type QuestionFormProps = {
   onSubmit: (payload: CreateQuestionPayload) => void;

@@ -1,9 +1,10 @@
-import type { NewPost } from "./NewPost";
-import type { WorkDetails } from "./WorkDetails";
-import type { ProjectPost } from "./ProjectPost";
-import type { QuestionPost } from "./QuestionPost";
-import type { TeamPost } from "./TeamPost";
-import type { WorkPost } from "./WorkPost";
+import type { NewPost } from "../kinds/NewPost";
+import type { ProjectPost } from "../kinds/ProjectPost";
+import type { QuestionPost } from "../kinds/QuestionPost";
+import type { TeamPost } from "../kinds/TeamPost";
+import type { WorkDetails } from "../kinds/WorkDetails";
+
+import type { WorkPost } from "../kinds/WorkPost";
 
 type QuestionCreateFields = Pick<QuestionPost, "title" | "content">;
 

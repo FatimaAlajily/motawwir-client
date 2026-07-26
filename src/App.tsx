@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "./features/auth/pages/LoginPage";
 import Dashbord from "./pages/Dashbord";
 import useAuthInit from "./features/auth/hooks/useAuthInit";
+import PostsPage from "./features/post/pages/PostsPage";
 const App = () => {
   const { isInit } = useAuthInit();
 
@@ -11,7 +12,9 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/dashbord" element={<Dashbord />} />
+      <Route path="/dashbord" element={<Dashbord />}>
+        <Route path="posts/:type" element={<PostsPage />} />
+      </Route>
     </Routes>
   );
 };

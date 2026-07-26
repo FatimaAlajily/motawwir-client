@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-
-type SkillsInputProps = {
-  label?: string;
-  value: string[];
-  onChange: (skills: string[]) => void;
-};
+import type { SkillsInputProps } from "../../types/fields/SkillsInputProps";
 
 export const SkillsInput = ({
   label = "المهارات",
@@ -15,6 +10,7 @@ export const SkillsInput = ({
   const [draft, setDraft] = useState("");
 
   function addSkill() {
+    // لو كان فاضي او القيمة نفسها متكررة متضيفش
     const trimmed = draft.trim();
     if (trimmed && !value.includes(trimmed)) {
       onChange([...value, trimmed]);
@@ -34,7 +30,7 @@ export const SkillsInput = ({
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1.5" style={{ font: "Tajawal" }}>
       <label className="text-sm font-semibold text-gray-700">{label}</label>
       <div className="flex flex-wrap gap-2 p-2 border border-gray-200 rounded-xl">
         {value.map((skill) => (
@@ -57,8 +53,8 @@ export const SkillsInput = ({
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={addSkill}
-          placeholder="اكتب مهارة واضغط Enter"
-          className="flex-1 min-w-[120px] px-2 py-1 text-sm focus:outline-none"
+          placeholder="اكتب مهارة واضغط Enter أو  ,"
+          className="flex-1 min-w-30 px-2 py-1 text-sm focus:outline-none"
         />
       </div>
     </div>

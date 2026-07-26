@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, Plus } from "lucide-react";
-import CreatePostModal from "../../../features/post/components/CreatePostModal";
+import CreatePostModal from "../../../features/post/components/models/CreatePostModal";
 
 const CreateButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { CreateTeamPayload } from "../types/CreatePostPayload";
-import { FormInput } from "./FormInput";
-import { FormTextarea } from "./FormTextarea";
-import { SkillsInput } from "./SkillsInput";
+import type { CreateTeamPayload } from "../../types/common/CreatePostPayload";
+import { FormInput } from "../forms/FormInput";
+import { FormTextarea } from "../forms/FormTextarea";
+import { SkillsInput } from "../forms/SkillsInput";
 
 type TeamFormProps = {
   onSubmit: (payload: CreateTeamPayload) => void;
@@ -29,7 +29,7 @@ const TeamForm = ({ onSubmit, loading }: TeamFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <FormInput
-        label="عنوان الفريق / الفكرة"
+        label="عنوان الفريق"
         value={title}
         onChange={setTitle}
         required

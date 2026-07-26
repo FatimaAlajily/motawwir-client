@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import { NavBar } from "../shared/components/common/NavBar";
 import { SideBar } from "../shared/components/common/SideBar";
 
@@ -20,7 +21,7 @@ const Dashbord = () => {
           {/* ---------- Main Content --------- */}
           <main className="flex-1 p-6">
             <h1 className="text-2xl font-bold text-gray-800">
-              مرحباً بك في منتدى المبرمجين
+              <Outlet />
             </h1>
           </main>
         </div>

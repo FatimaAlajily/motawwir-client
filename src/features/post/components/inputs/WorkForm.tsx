@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { CreateWorkPayload } from "../types/CreatePostPayload";
-import { FormTextarea } from "./FormTextarea";
+import type { CreateWorkPayload } from "../../types/common/CreatePostPayload";
+import { FormTextarea } from "../forms/FormTextarea";
 
-import { SkillsInput } from "./SkillsInput";
-import { FormInput } from "./FormInput";
+import { SkillsInput } from "../forms/SkillsInput";
+import { FormInput } from "../forms/FormInput";
 type WorkFormProps = {
   onSubmit: (payload: CreateWorkPayload) => void;
   loading: boolean;
@@ -52,7 +52,7 @@ const WorkForm = ({ onSubmit, loading }: WorkFormProps) => {
 
       <div className="grid grid-cols-2 gap-4">
         <FormInput
-          label="الموقع"
+          label="المكان"
           value={location}
           onChange={setLocation}
           required
@@ -64,13 +64,13 @@ const WorkForm = ({ onSubmit, loading }: WorkFormProps) => {
           required
         />
         <FormInput
-          label="مكان العمل (عن بُعد / حضوري)"
+          label="مكان العمل (عن بعد/ حضور)"
           value={workPlace}
           onChange={setWorkPlace}
           required
         />
         <FormInput
-          label="وسيلة التواصل"
+          label="رقم التواصل"
           value={contact}
           onChange={setContact}
           required

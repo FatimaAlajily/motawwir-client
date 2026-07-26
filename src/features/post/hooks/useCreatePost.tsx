@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPostRequest } from "../api/PostApi";
-import type { CreatePostPayload } from "../types/CreatePostPayload";
-import type { Post } from "../types/Post";
+import type { CreatePostPayload } from "../types/common/CreatePostPayload";
+import type { Post } from "../types/common/Post";
 
 const useCreatePost = () => {
   const [loading, setLoading] = useState<boolean>(false);

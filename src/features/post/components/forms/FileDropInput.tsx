@@ -1,5 +1,5 @@
 import { Upload, X } from "lucide-react";
-import type { FileDropInputProps } from "../types/FileDropInputProps";
+import type { FileDropInputProps } from "../../types/fields/FileDropInputProps";
 
 export const FileDropInput = ({
   label,
@@ -25,7 +25,7 @@ export const FileDropInput = ({
     ) : (
       <label className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-dashed border-gray-300 hover:border-[#4b1e8a] cursor-pointer text-sm text-gray-500">
         <Upload size={16} />
-        اختر ملفًا
+        اختر ملف
         <input
           type="file"
           accept={accept}

@@ -1,4 +1,4 @@
-import type { BasePost } from "./BasePost";
+import type { BasePost } from "../common/BasePost";
 
 export type NewPost = BasePost & {
   type: "new";
