@@ -10,7 +10,7 @@ type PostCardProps = {
   post: Post;
 };
 
-const FULL_WIDTH_TYPES: PostType[] = ["question", "work"];
+const FULL_WIDTH_TYPES: PostType[] = ["question", "work", "new"];
 
 const PostCard = ({ post }: PostCardProps) => {
   const isFullWidth = FULL_WIDTH_TYPES.includes(post.type);

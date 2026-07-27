@@ -119,7 +119,7 @@ const WorkPostCard = ({ post }: WorkPostCardProps) => {
         <button
           type="button"
           onClick={() => setIsExpanded((prev) => !prev)}
-          className="shrink-0 text-[11px] font-semibold text-[#6620F3] border border-[#6620F3] rounded-full px-2.5 py-0.5 min-w-[70px] text-center hover:bg-[#e5e5f8] transition-colors"
+          className="shrink-0 text-[11px] font-semibold text-[#6620F3] border border-[#6620F3] rounded-full px-2.5 py-0.5 min-w-17.5 text-center hover:bg-[#e5e5f8] transition-colors"
         >
           {isExpanded ? "رؤية أقل" : "رؤية المزيد"}
         </button>
