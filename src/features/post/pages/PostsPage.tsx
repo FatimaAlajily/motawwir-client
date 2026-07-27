@@ -29,7 +29,7 @@ const PostsPage = () => {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 items-start">
+    <div className="grid grid-cols-3 gap-4 items-start">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}

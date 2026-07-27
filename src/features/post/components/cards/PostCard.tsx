@@ -14,7 +14,7 @@ const FULL_WIDTH_TYPES: PostType[] = ["question", "work"];
 
 const PostCard = ({ post }: PostCardProps) => {
   const isFullWidth = FULL_WIDTH_TYPES.includes(post.type);
-  const spanClass = isFullWidth ? "col-span-2" : "col-span-1";
+  const spanClass = isFullWidth ? "col-span-3" : "col-span-1";
 
   function renderCard() {
     switch (post.type) {
