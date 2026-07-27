@@ -29,13 +29,13 @@ const PostsPage = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4 items-start">
+    <div className="grid grid-cols-6 gap-4 items-start">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
 
       {lastPage > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4 col-span-6">
           {Array.from({ length: lastPage }, (_, i) => i + 1).map((p) => (
             <button
               key={p}

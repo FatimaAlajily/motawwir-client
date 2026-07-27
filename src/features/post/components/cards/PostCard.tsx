@@ -10,11 +10,17 @@ type PostCardProps = {
   post: Post;
 };
 
-const FULL_WIDTH_TYPES: PostType[] = ["question", "work", "new"];
+// تحديث القيم لتتوافق مع شبكة الـ 6 أعمدة
+const COL_SPAN_MAP: Record<PostType, string> = {
+  question: "col-span-6", // العرض الكامل (بطاقة واحدة في السطر)
+  work: "col-span-6", // العرض الكامل
+  new: "col-span-6", // العرض الكامل
+  project: "col-span-3", // نصف العرض (بطاقتين في السطر)
+  team: "col-span-3", // نصف العرض (بطاقتين في السطر)
+};
 
 const PostCard = ({ post }: PostCardProps) => {
-  const isFullWidth = FULL_WIDTH_TYPES.includes(post.type);
-  const spanClass = isFullWidth ? "col-span-3" : "col-span-1";
+  const spanClass = COL_SPAN_MAP[post.type] || "col-span-6";
 
   function renderCard() {
     switch (post.type) {
@@ -28,6 +34,8 @@ const PostCard = ({ post }: PostCardProps) => {
         return <ProjectPostCard post={post} />;
       case "team":
         return <TeamPostCard post={post} />;
+      default:
+        return null;
     }
   }
 
