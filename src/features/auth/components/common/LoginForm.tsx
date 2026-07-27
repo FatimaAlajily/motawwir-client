@@ -50,7 +50,7 @@ const LoginForm = () => {
     });
     if (response.status === "success") {
       setAttempts(0);
-      navigate("/api/auth/login"); // navigate to dashboard don't forget
+      navigate("/dashbord"); // navigate to dashboard don't forget
     } else {
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 400);
@@ -59,7 +59,7 @@ const LoginForm = () => {
       setAttempts(newAttempts);
 
       if (newAttempts >= 3) {
-        const lockoutTime = Date.now() + 60 * 1000; // دقيقة واحدة
+        const lockoutTime = Date.now() + 60 * 1000;
         setLockout(lockoutTime);
         setTime(60);
       }
