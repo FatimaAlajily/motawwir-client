@@ -61,7 +61,7 @@ const QuestionPostCard = ({ post }: QuestionPostCardProps) => {
           </span>
 
           <p
-            className={`text-sm font-medium text-text-muted break-words min-w-0 flex-1 transition-all duration-300 ease-in-out ${
+            className={`text-sm font-medium text-text-muted wrap-break-word min-w-0 flex-1 transition-all duration-300 ease-in-out ${
               isExpanded ? "" : "line-clamp-2"
             }`}
           >

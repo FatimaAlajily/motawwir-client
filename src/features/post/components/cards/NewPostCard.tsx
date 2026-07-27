@@ -53,7 +53,7 @@ const NewPostCard = ({ post }: NewPostCardProps) => {
       <a
         href={post.primary_link}
         target="_blank"
-        rel="رابط المصدر"
+        rel="noopener noreferrer"
         className="text-[11px] text-[#6620F3] hover:underline break-all block mb-2"
       >
         {post.primary_link}
