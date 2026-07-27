@@ -46,7 +46,11 @@ const TeamPostCard = ({ post }: TeamPostCardProps) => {
       />
 
       {/* -------- Content -------- */}
-      <p className="text-[11px] text-gray-700 leading-snug whitespace-pre-line wrap-break-word mb-2">
+      <p
+        className={`text-[11px] text-gray-700 leading-snug whitespace-pre-line wrap-break-word mb-2 ${
+          isExpanded ? "" : "line-clamp-3"
+        }`}
+      >
         {post.content}
       </p>
 
@@ -99,13 +103,14 @@ const TeamPostCard = ({ post }: TeamPostCardProps) => {
         <a
           href={post.primary_link}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="رابط القروب"
           className="
             flex
             items-center
             justify-center
             gap-1.5
-            w-full
+            w-52
+            mx-auto
             bg-[#6620F3]
             hover:bg-[#5a1cd8]
             text-white
