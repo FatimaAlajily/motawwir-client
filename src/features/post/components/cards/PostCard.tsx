@@ -16,7 +16,7 @@ const COL_SPAN_MAP: Record<PostType, string> = {
   work: "col-span-6", // العرض الكامل
   new: "col-span-6", // العرض الكامل
   project: "col-span-3", // نصف العرض (بطاقتين في السطر)
-  team: "col-span-3", // نصف العرض (بطاقتين في السطر)
+  team: "col-span-2", // نصف العرض (بطاقتين في السطر)
 };
 
 const PostCard = ({ post }: PostCardProps) => {
