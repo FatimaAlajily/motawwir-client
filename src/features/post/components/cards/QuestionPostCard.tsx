@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Bookmark, Bot, MessageCircle, MoveDown, MoveUp } from "lucide-react";
-
 import type { QuestionPost } from "../../types/kinds/QuestionPost";
-import { formatDate } from "../../../../shared/utils/formatDate";
+import PostHeader from "./PostHeader";
+import PostFooter from "./PostFooter";
 import "../../../../styles/theme.css";
 
 type QuestionPostCardProps = {
@@ -14,47 +13,23 @@ const QuestionPostCard = ({ post }: QuestionPostCardProps) => {
 
   return (
     <div
-      className="bg-white border border-gray-100 rounded-2xl p-2 color-boarder shadow-sm hover:shadow-md transition-shadow linear-border w-full"
+      dir="rtl"
+      className="bg-white border border-gray-100 rounded-2xl p-2 color-boarder shadow-sm hover:shadow-md transition-shadow linear-border w-full overflow-hidden flex flex-col"
       style={{ fontFamily: "Tajawal" }}
     >
       {/* -------- Header -------- */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <img
-              src={post.user.avatar}
-              alt={post.user.user_name}
-              className="w-8 h-8 rounded-full object-cover ring ring-[#9723bb]"
-            />
-            <span className="absolute bottom-0 right-0 w-2 h-2 bg-purple-600 border-2 border-white rounded-full" />
-          </div>
-
-          <div className="flex items-center gap-2 text-sm">
-            <span
-              className="font-bold text-text-muted"
-              style={{ fontFamily: "Tajawal" }}
-            >
-              {post.user.user_name}
-            </span>
-            <span className="text-[#6D6D6D] font-medium text-sm">
-              {formatDate(post.created_at)}
-            </span>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="text-gray-400 hover:text-[#6620F3] transition-colors"
-        >
-          <Bookmark size={20} />
-        </button>
-      </div>
+      <PostHeader
+        avatar={post.user.avatar}
+        userName={post.user.user_name}
+        createdAt={post.created_at}
+        showBookmark={true}
+      />
 
       {/* -------- Title -------- */}
-      <h3 className="text-sm font-bold text-motaweer mb-1">{post.title}</h3>
+      <h3 className="text-xs font-bold text-motaweer mb-1">{post.title}</h3>
 
       {/* -------- Content Row -------- */}
-      <div className="flex items-start justify-between gap-4 mb-2">
+      <div className="flex items-start justify-between gap-4 mb-2 w-full overflow-hidden">
         <div className="flex items-start gap-3 min-w-0 flex-1">
           <span className="text-sm font-bold text-violet-900 shrink-0 mt-0.5">
             سؤال
@@ -81,27 +56,12 @@ const QuestionPostCard = ({ post }: QuestionPostCardProps) => {
       <hr className="border-gray-100 mb-3" />
 
       {/* -------- Footer -------- */}
-      <div className="flex items-center justify-center font-medium gap-7 text-sm text-[#6F7C8D]">
-        <button className="flex items-center gap-1.5 hover:text-[#6620F3] transition-colors">
-          <MoveUp size={16} className="text-[#4B1E8A]" />
-          تصويت إيجابي ({post.votes.upvotes})
-        </button>
-
-        <button className="flex items-center gap-1.5 hover:text-[#6620F3] transition-colors">
-          <MoveDown size={16} className="text-[#4B1E8A]" />
-          تصويت سلبي ({post.votes.downvotes})
-        </button>
-
-        <div className="flex items-center gap-1.5">
-          <Bot size={16} className="text-[#4B1E8A]" />
-          ذكاء اصطناعي ({post.votes.ai})
-        </div>
-
-        <div className="flex items-center gap-1.5">
-          <MessageCircle size={16} className="text-[#4B1E8A]" />
-          الأجوبة
-        </div>
-      </div>
+      <PostFooter
+        upvotes={post.votes.upvotes}
+        downvotes={post.votes.downvotes}
+        ai={post.votes.ai}
+        commentsLabel="الأجوبة"
+      />
     </div>
   );
 };
