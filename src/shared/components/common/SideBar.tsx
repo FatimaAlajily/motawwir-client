@@ -22,122 +22,69 @@ import {
 import "../../../styles/theme.css";
 import SideBarIcons from "../common/SideBarIcons";
 import rabbitSidebar from "../../../assets/images/rabbit-sidebar.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // ✅ استيراد useLocation
 
 type SideBarProps = {
   onNavigate?: () => void;
 };
 
+// ✅ تعريف روابط السايدبار في مصفوفة لتسهيل التكرار
+const NAV_LINKS = [
+  { to: "/dashbord", label: "الصفحة الرئيسية", icon: Home },
+  { to: "/dashbord/chat", label: "الدردشة العالمية", icon: MessageSquare },
+  { to: "/dashbord/posts/question", label: "الأسئلة", icon: HelpCircle },
+  { to: "/dashbord/posts/new", label: "الأخبار", icon: Globe },
+  { to: "/dashbord/posts/work", label: "فرص العمل", icon: Briefcase },
+  { to: "/dashbord/posts/team", label: "كون فريق", icon: Users },
+  { to: "/dashbord/posts/project", label: "المشاريع", icon: FolderKanban },
+  { to: "/dashbord/posts/users", label: "قائمة المستخدمين", icon: User2 },
+];
+
 export function SideBar({ onNavigate }: SideBarProps) {
+  const { pathname } = useLocation(); // ✅ الحصول على مسار الصفحة الحالية
+
   return (
     <Sidebar
       aria-label="نافذة الاقسام"
-      className=" bg-white [&>div]:bg-white no-scrollbar rounded-l-2xl h-full pt-1 pb-4 shadow-sm flex flex-col"
+      className="bg-white [&>div]:bg-white no-scrollbar rounded-l-2xl h-full pt-1 pb-4 shadow-sm flex flex-col"
     >
       <SidebarItems className="flex flex-col h-full">
         <SidebarItemGroup className="space-y-1.5 mt-6 flex-1">
-          <Link to={"/dashbord"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons icon={Home} color={"text-[4b1e8a]"} size={16} />
-              )}
-              className="bg-[#e5e5f8] text-[#4b1e8a] font-semibold rounded-full hover:bg-[#e5e5f8]"
-            >
-              <span className="font-semibold text-sm text-[#4b1e8a]">
-                الصفحة الرئيسية
-              </span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/chat"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons
-                  icon={MessageSquare}
-                  color={"text-[4b1e8a]"}
-                  size={16}
-                />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full no-scrollbar "
-            >
-              <span className="font-semibold text-sm">الدردشة العالمية</span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/posts/question"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons
-                  icon={HelpCircle}
-                  color={"text-[4b1e8a]"}
-                  size={16}
-                />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full  "
-            >
-              <span className="font-semibold text-sm">الأسئلة</span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/posts/new"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons icon={Globe} color={"text-[4b1e8a]"} size={16} />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full "
-            >
-              <span className="font-semibold text-sm">الأخبار</span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/posts/work"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons
-                  icon={Briefcase}
-                  color={"text-[4b1e8a]"}
-                  size={16}
-                />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full "
-            >
-              <span className="font-semibold text-sm">فرص العمل</span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/posts/team"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons icon={Users} color={"text-[4b1e8a]"} size={16} />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full "
-            >
-              <span className="font-semibold text-sm">كون فريق</span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/posts/project"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons
-                  icon={FolderKanban}
-                  color={"text-[4b1e8a]"}
-                  size={16}
-                />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full "
-            >
-              <span className="font-semibold text-sm">المشاريع</span>
-            </SidebarItem>
-          </Link>
-          <Link to={"/dashbord/posts/users"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons icon={User2} color={"text-[4b1e8a]"} size={16} />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full "
-            >
-              <span className="font-semibold text-sm">قائمة المستخدمين</span>
-            </SidebarItem>
-          </Link>
+          {/* ✅ المرور على الروابط وتوليدها */}
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.to; // فحص إذا كانت الصفحة الحالية هي نفسها الرابط
+            return (
+              <Link key={link.to} to={link.to} onClick={onNavigate}>
+                <SidebarItem
+                  icon={() => (
+                    <SideBarIcons
+                      icon={link.icon}
+                      color={"text-[4b1e8a]"}
+                      size={16}
+                    />
+                  )}
+                  // ✅ تطبيق الكلاسات ديناميكياً
+                  className={`font-semibold rounded-full ${
+                    isActive
+                      ? "bg-[#e5e5f8] text-[#4b1e8a] hover:bg-[#e5e5f8]"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  <span
+                    className={`font-semibold text-sm ${
+                      isActive ? "text-[#4b1e8a]" : ""
+                    }`}
+                  >
+                    {link.label}
+                  </span>
+                </SidebarItem>
+              </Link>
+            );
+          })}
         </SidebarItemGroup>
 
         {/* -------- Bottom Section */}
-        <SidebarItemGroup className="mt-auto ">
+        <SidebarItemGroup className="mt-auto">
           <div className="flex justify-center mb-4">
             <img
               src={rabbitSidebar}
@@ -150,7 +97,7 @@ export function SideBar({ onNavigate }: SideBarProps) {
               icon={() => (
                 <SideBarIcons icon={LogOut} color={"text-[4b1e8a]"} size={16} />
               )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full "
+              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full"
             >
               <span className="font-semibold text-sm">تسجيل الخروج</span>
             </SidebarItem>
