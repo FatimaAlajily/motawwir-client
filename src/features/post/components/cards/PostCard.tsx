@@ -14,12 +14,13 @@ type PostCardProps = {
   onEdit: (post: Post) => void;
 };
 
+// ✅ تعديل الأحجام لتكون متجاوبة (على الجوال تأخذ العرض الكامل 6)
 const COL_SPAN_MAP: Record<PostType, string> = {
-  question: "col-span-6",
-  work: "col-span-6",
-  new: "col-span-6",
-  project: "col-span-3",
-  team: "col-span-2",
+  question: "col-span-6", // العرض الكامل دائماً
+  work: "col-span-6", // العرض الكامل دائماً
+  new: "col-span-6", // العرض الكامل دائماً
+  project: "col-span-6 md:col-span-3", // جوال: كامل / تابلت وأعلى: نصف العرض (بطاقتين)
+  team: "col-span-6 md:col-span-3 lg:col-span-2", // جوال: كامل / تابلت: نصف العرض / كمبيوتر: ثلث العرض (3 بطاقات)
 };
 
 const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {

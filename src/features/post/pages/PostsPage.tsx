@@ -24,7 +24,6 @@ const PostsPage = () => {
     setPage(1);
   }
 
-  // ✅ التغيير الأساسي: استخرج meta بدل lastPage
   const { posts, setPosts, meta, loading, error } = useFetchPosts(
     validType,
     page,
@@ -60,7 +59,7 @@ const PostsPage = () => {
 
   return (
     <>
-      <div className="grid grid-cols-6 gap-4 items-start">
+      <div className="grid grid-cols-6 gap-4 ">
         {posts.map((post) => (
           <PostCard
             key={post.id}
