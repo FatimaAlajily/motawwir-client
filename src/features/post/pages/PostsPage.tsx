@@ -10,6 +10,7 @@ import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
 import Pagination from "../components/inputs/Pagination";
 import LOADING_IMAGE from "../../../assets/images/rabitloadingsearch.png";
 import NO_RESULTS_IMAGE from "../../../assets/images/noresultfound.png";
+import SkeletonCard from "../components/loading/SkeletonCard";
 
 const PostsPage = () => {
   const { type } = useParams<{ type: string }>();
@@ -32,6 +33,8 @@ const PostsPage = () => {
     searchQuery
   );
 
+  const isSearching = searchQuery.trim().length > 0;
+
   function handlePostDeleted(deletedId: number) {
     setPosts((prev) => prev.filter((p) => p.id !== deletedId));
   }
@@ -43,15 +46,15 @@ const PostsPage = () => {
     setEditingPost(null);
   }
 
-  // if (loading) {
-  //   return <p className="text-center text-gray-400 py-10">جاري التحميل...</p>;
-  // }
+  if (error) {
+    return <p className="text-center text-red-500 py-10">{error}</p>;
+  }
 
-  // if (error) {
-  //   return <p className="text-center text-red-500 py-10">{error}</p>;
-  // }
+  if (error) {
+    return <p className="text-center text-red-500 py-10">{error}</p>;
+  }
 
-  if (loading) {
+  if (loading && isSearching) {
     return (
       <div className="flex flex-col items-center justify-center h-full py-20">
         <img
@@ -64,10 +67,6 @@ const PostsPage = () => {
     );
   }
 
-  if (error) {
-    return <p className="text-center text-red-500 py-10">{error}</p>;
-  }
-
   // if (posts.length === 0) {
   //   return (
   //     <p className="text-center text-gray-400 py-10">
@@ -76,7 +75,7 @@ const PostsPage = () => {
   //   );
   // }
 
-  if (posts.length === 0) {
+  if (!loading && posts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full py-20">
         <img
@@ -85,7 +84,7 @@ const PostsPage = () => {
           className="w-48 h-48 object-contain mb-4"
         />
         <p className="text-gray-500 font-semibold text-sm">
-          {searchQuery
+          {isSearching
             ? "لم يتم إيجاد نتائج مطابقة لبحثك"
             : "لا توجد منشورات في هذه الصفحة حتى الآن"}
         </p>
@@ -96,17 +95,21 @@ const PostsPage = () => {
   return (
     <>
       <div className="grid grid-cols-6 gap-4 ">
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            onDeleted={() => handlePostDeleted(post.id)}
-            onEdit={(p) => setEditingPost(p)}
-          />
-        ))}
+        {loading && !isSearching
+          ? Array.from({ length: 5 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          : posts.map((post) => (
+              <PostCard
+                key={post.id}
+                post={post}
+                onDeleted={() => handlePostDeleted(post.id)}
+                onEdit={(p) => setEditingPost(p)}
+              />
+            ))}
       </div>
 
-      {meta && <Pagination meta={meta} onPageChange={setPage} />}
+      {!loading && meta && <Pagination meta={meta} onPageChange={setPage} />}
 
       <EditPostModal
         post={editingPost}
