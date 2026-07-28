@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useProfile from "../../hooks/useProfile";
+import { useAuthStore } from "../../../auth/store/useAuthStore";
 import type { Profile } from "../../types/user/Profile";
 import type { TabType } from "./ProfileTabs";
 
@@ -27,6 +28,9 @@ export default function ProfileView() {
   const { profile, fetching, error } = useProfile();
   const [activeTab, setActiveTab] = useState<TabType>("echo");
   const isOwner = true;
+
+  // آيدي المستخدم المسجّل دخوله حالياً، من نفس الستور اللي يستخدمه useLogin
+  const currentUserId = useAuthStore((state) => state.user?.id);
 
   if (fetching) {
     return (
@@ -69,7 +73,12 @@ export default function ProfileView() {
                 
                 <div className="flex-1">
                   {/* ← عرض المكون المناسب بناءً على التاب */}
-                  {activeTab === "echo" && <EchoTab />}
+                  {activeTab === "echo" && uiProfile.user && (
+                    <EchoTab
+                      profileUserId={uiProfile.user.id}
+                      currentUserId={currentUserId}
+                    />
+                  )}
                   {activeTab === "nexus" && <NexusTab />}
                   {activeTab === "vault" && <VaultTab />}
                 </div>

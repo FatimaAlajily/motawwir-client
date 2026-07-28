@@ -1,14 +1,17 @@
-import { MessageSquare } from "lucide-react";
-import TabEmptyState from "./TabEmptyState";
+import CommentSection from "../../../comment/components/common/CommentSection";
 
-// لاحقاً ستضيف هنا: const { data } = useFetchEchoMessages();
-export default function EchoTab() {
+type Props = {
+  profileUserId: number;
+  currentUserId?: number;
+};
+
+// جدار الصدى = تعليقات من نوع "profile" على صاحب هذا البروفايل
+export default function EchoTab({ profileUserId, currentUserId }: Props) {
   return (
     <div className="p-6">
-      <TabEmptyState
-        icon={<MessageSquare size={32} />}
-        title="جدار الصدى"
-        description="لا توجد رسائل على جدار الصدى حالياً."
+      <CommentSection
+        target={{ type: "profile", profile_user_id: profileUserId }}
+        currentUserId={currentUserId}
       />
     </div>
   );
