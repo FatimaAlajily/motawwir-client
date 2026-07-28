@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Bookmark, ArrowLeft, ChevronDown } from "lucide-react";
 import type { TeamPost } from "../../types/kinds/TeamPost";
 import PostHeader from "./PostHeader";
@@ -6,15 +6,14 @@ import PostFooter from "./PostFooter";
 
 type TeamPostCardProps = {
   post: TeamPost;
+  deleteAction?: ReactNode;
 };
 
-// 1. تحديد عدد المهارات المرئية (3 مهارات تضمن بقاءها في سطر واحد)
 const VISIBLE_SKILLS_COUNT = 3;
 
-const TeamPostCard = ({ post }: TeamPostCardProps) => {
+const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // 2. حساب المهارات المرئية والمتبقية
   const visibleSkills = isExpanded
     ? post.skill
     : post.skill.slice(0, VISIBLE_SKILLS_COUNT);
@@ -46,6 +45,7 @@ const TeamPostCard = ({ post }: TeamPostCardProps) => {
         userName={post.user.user_name}
         createdAt={post.created_at}
         showBookmark={false}
+        extraAction={deleteAction}
       />
 
       {/* 4. حاوية flex-1 لدمج المساحة الفارغة */}

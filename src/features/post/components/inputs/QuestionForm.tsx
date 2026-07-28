@@ -6,11 +6,18 @@ import { FormInput } from "../forms/FormInput";
 type QuestionFormProps = {
   onSubmit: (payload: CreateQuestionPayload) => void;
   loading: boolean;
+  initialValues?: { title: string; content: string };
+  submitLabel?: string;
 };
 
-const QuestionForm = ({ onSubmit, loading }: QuestionFormProps) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+const QuestionForm = ({
+  onSubmit,
+  loading,
+  initialValues,
+  submitLabel = "نشر السؤال",
+}: QuestionFormProps) => {
+  const [title, setTitle] = useState(initialValues?.title ?? "");
+  const [content, setContent] = useState(initialValues?.content ?? "");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,7 +48,7 @@ const QuestionForm = ({ onSubmit, loading }: QuestionFormProps) => {
         disabled={loading}
         className="bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
       >
-        {loading ? "جاري النشر..." : "نشر السؤال"}
+        {loading ? "جاري النشر..." : submitLabel}
       </button>
     </form>
   );

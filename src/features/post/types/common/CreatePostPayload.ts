@@ -28,10 +28,10 @@ type WorkCreateFields = Pick<WorkPost, "title" | "content" | "skill"> &
 export type CreateQuestionPayload = QuestionCreateFields & { type: "question" };
 export type CreateTeamPayload = TeamCreateFields & { type: "team" };
 export type CreateWorkPayload = WorkCreateFields & { type: "work" };
-export type CreateNewPayload = NewCreateFields & { type: "new"; file: File };
+export type CreateNewPayload = NewCreateFields & { type: "new"; file?: File };
 export type CreateProjectPayload = ProjectCreateFields & {
   type: "project";
-  file: File;
+  file?: File;
 };
 
 export type CreatePostPayload =

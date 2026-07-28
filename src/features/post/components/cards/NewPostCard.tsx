@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Bookmark } from "lucide-react";
 import type { NewPost } from "../../types/kinds/NewPost";
 import PostHeader from "./PostHeader";
@@ -6,6 +6,7 @@ import PostFooter from "./PostFooter";
 
 type NewPostCardProps = {
   post: NewPost;
+  deleteAction?: ReactNode;
 };
 
 const VIDEO_EXTENSIONS = ["mp4", "webm", "ogg", "mov"];
@@ -15,7 +16,7 @@ function isVideoFile(url: string): boolean {
   return VIDEO_EXTENSIONS.includes(extension);
 }
 
-const NewPostCard = ({ post }: NewPostCardProps) => {
+const NewPostCard = ({ post, deleteAction }: NewPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasFile = Boolean(post.file);
@@ -35,6 +36,7 @@ const NewPostCard = ({ post }: NewPostCardProps) => {
             userName={post.user.user_name}
             createdAt={post.created_at}
             showBookmark={false}
+            extraAction={deleteAction}
           />
         </div>
 

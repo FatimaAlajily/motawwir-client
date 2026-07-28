@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { QuestionPost } from "../../types/kinds/QuestionPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
@@ -6,9 +6,10 @@ import "../../../../styles/theme.css";
 
 type QuestionPostCardProps = {
   post: QuestionPost;
+  deleteAction?: ReactNode;
 };
 
-const QuestionPostCard = ({ post }: QuestionPostCardProps) => {
+const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -23,6 +24,7 @@ const QuestionPostCard = ({ post }: QuestionPostCardProps) => {
         userName={post.user.user_name}
         createdAt={post.created_at}
         showBookmark={true}
+        extraAction={deleteAction}
       />
 
       {/* -------- Title -------- */}

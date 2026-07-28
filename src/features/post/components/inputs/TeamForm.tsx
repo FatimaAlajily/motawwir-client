@@ -7,13 +7,22 @@ import { SkillsInput } from "../forms/SkillsInput";
 type TeamFormProps = {
   onSubmit: (payload: CreateTeamPayload) => void;
   loading: boolean;
+  initialValues?: Omit<CreateTeamPayload, "type">;
+  submitLabel?: string;
 };
 
-const TeamForm = ({ onSubmit, loading }: TeamFormProps) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [skill, setSkill] = useState<string[]>([]);
-  const [primaryLink, setPrimaryLink] = useState("");
+const TeamForm = ({
+  onSubmit,
+  loading,
+  initialValues,
+  submitLabel = "نشر الطلب",
+}: TeamFormProps) => {
+  const [title, setTitle] = useState(initialValues?.title ?? "");
+  const [content, setContent] = useState(initialValues?.content ?? "");
+  const [skill, setSkill] = useState<string[]>(initialValues?.skill ?? []);
+  const [primaryLink, setPrimaryLink] = useState(
+    initialValues?.primary_link ?? ""
+  );
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +67,7 @@ const TeamForm = ({ onSubmit, loading }: TeamFormProps) => {
         disabled={loading}
         className="bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
       >
-        {loading ? "جاري النشر..." : "نشر الطلب"}
+        {loading ? "جاري النشر..." : submitLabel}
       </button>
     </form>
   );

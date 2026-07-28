@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { MoreVertical } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import type { WorkPost } from "../../types/kinds/WorkPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 
 type WorkPostCardProps = {
   post: WorkPost;
+  deleteAction?: ReactNode;
 };
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const WorkPostCard = ({ post }: WorkPostCardProps) => {
+const WorkPostCard = ({ post, deleteAction }: WorkPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const visibleSkills = isExpanded
@@ -31,12 +31,13 @@ const WorkPostCard = ({ post }: WorkPostCardProps) => {
         userName={post.user.user_name}
         createdAt={post.created_at}
         extraAction={
-          <button
-            type="button"
-            className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5"
-          >
-            <MoreVertical size={15} />
-          </button>
+          <>
+            {deleteAction}
+            <button
+              type="button"
+              className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5"
+            ></button>
+          </>
         }
       />
 

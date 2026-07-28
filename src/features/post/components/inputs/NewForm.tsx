@@ -6,17 +6,33 @@ import { FormInput } from "../forms/FormInput";
 type NewFormProps = {
   onSubmit: (payload: CreateNewPayload) => void;
   loading: boolean;
+  initialValues?: { title: string; primary_link: string };
+  submitLabel?: string;
+  isEditMode?: boolean;
 };
 
-const NewForm = ({ onSubmit, loading }: NewFormProps) => {
-  const [title, setTitle] = useState("");
-  const [primaryLink, setPrimaryLink] = useState("");
+const NewForm = ({
+  onSubmit,
+  loading,
+  initialValues,
+  submitLabel = "نشر الخبر",
+  isEditMode = false,
+}: NewFormProps) => {
+  const [title, setTitle] = useState(initialValues?.title ?? "");
+  const [primaryLink, setPrimaryLink] = useState(
+    initialValues?.primary_link ?? ""
+  );
   const [file, setFile] = useState<File | null>(null);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!file) return;
-    onSubmit({ type: "new", title, primary_link: primaryLink, file });
+    if (!isEditMode && !file) return;
+    onSubmit({
+      type: "new",
+      title,
+      primary_link: primaryLink,
+      file: file ?? undefined,
+    });
   }
 
   return (
@@ -37,18 +53,22 @@ const NewForm = ({ onSubmit, loading }: NewFormProps) => {
         required
       />
       <FileDropInput
-        label="الملف المرفق"
+        label={
+          isEditMode
+            ? "الملف المرفق (اتركه فارغًا للإبقاء على الحالي)"
+            : "الملف المرفق"
+        }
         file={file}
         onChange={setFile}
-        required
+        required={isEditMode}
       />
 
       <button
         type="submit"
-        disabled={loading || !file}
+        disabled={loading || (!isEditMode && !file)}
         className="bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
       >
-        {loading ? "جاري النشر..." : "نشر الخبر"}
+        {loading ? "جاري النشر..." : submitLabel}
       </button>
     </form>
   );

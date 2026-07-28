@@ -3,14 +3,44 @@ import { useParams } from "react-router-dom";
 import type { PostType } from "../types/common/PostType";
 import useFetchPosts from "../hooks/useFetchPosts";
 import PostCard from "../components/cards/PostCard";
+import type { Post } from "../types/common/Post";
+import EditPostModal from "../components/ui/EditPostModal";
+import { usePostSearchStore } from "../../../shared/store/usePostSearchStore";
+import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
+import Pagination from "../components/inputs/Pagination";
 
 const PostsPage = () => {
   const { type } = useParams<{ type: string }>();
   const [page, setPage] = useState(1);
-
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
   const validType = type as PostType;
 
-  const { posts, loading, error, lastPage } = useFetchPosts(validType, page);
+  const rawSearchQuery = usePostSearchStore((state) => state.query);
+  const searchQuery = useDebouncedValue(rawSearchQuery, 400);
+
+  const [prevSearchQuery, setPrevSearchQuery] = useState(searchQuery);
+  if (searchQuery !== prevSearchQuery) {
+    setPrevSearchQuery(searchQuery);
+    setPage(1);
+  }
+
+  // ✅ التغيير الأساسي: استخرج meta بدل lastPage
+  const { posts, setPosts, meta, loading, error } = useFetchPosts(
+    validType,
+    page,
+    searchQuery
+  );
+
+  function handlePostDeleted(deletedId: number) {
+    setPosts((prev) => prev.filter((p) => p.id !== deletedId));
+  }
+
+  function handlePostUpdated(updatedPost: Post) {
+    setPosts((prev) =>
+      prev.map((p) => (p.id === updatedPost.id ? updatedPost : p))
+    );
+    setEditingPost(null);
+  }
 
   if (loading) {
     return <p className="text-center text-gray-400 py-10">جاري التحميل...</p>;
@@ -29,29 +59,26 @@ const PostsPage = () => {
   }
 
   return (
-    <div className="grid grid-cols-6 gap-4 items-start">
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
+    <>
+      <div className="grid grid-cols-6 gap-4 items-start">
+        {posts.map((post) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            onDeleted={() => handlePostDeleted(post.id)}
+            onEdit={(p) => setEditingPost(p)}
+          />
+        ))}
+      </div>
 
-      {lastPage > 1 && (
-        <div className="flex justify-center gap-2 mt-4 col-span-6">
-          {Array.from({ length: lastPage }, (_, i) => i + 1).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPage(p)}
-              className={`w-8 h-8 rounded-full text-sm font-semibold ${
-                p === page
-                  ? "bg-[#6620F3] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+      {meta && <Pagination meta={meta} onPageChange={setPage} />}
+
+      <EditPostModal
+        post={editingPost}
+        onClose={() => setEditingPost(null)}
+        onUpdated={handlePostUpdated}
+      />
+    </>
   );
 };
 

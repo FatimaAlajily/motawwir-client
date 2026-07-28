@@ -8,19 +8,38 @@ import { FileDropInput } from "../forms/FileDropInput";
 type ProjectFormProps = {
   onSubmit: (payload: CreateProjectPayload) => void;
   loading: boolean;
+  initialValues?: {
+    title: string;
+    content: string;
+    skill: string[];
+    primary_link: string;
+    secondary_link: string | null;
+  };
+  submitLabel?: string;
+  isEditMode?: boolean;
 };
 
-const ProjectForm = ({ onSubmit, loading }: ProjectFormProps) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [skill, setSkill] = useState<string[]>([]);
-  const [primaryLink, setPrimaryLink] = useState("");
-  const [secondaryLink, setSecondaryLink] = useState("");
+const ProjectForm = ({
+  onSubmit,
+  loading,
+  initialValues,
+  submitLabel = "نشر المشروع",
+  isEditMode = false,
+}: ProjectFormProps) => {
+  const [title, setTitle] = useState(initialValues?.title ?? "");
+  const [content, setContent] = useState(initialValues?.content ?? "");
+  const [skill, setSkill] = useState<string[]>(initialValues?.skill ?? []);
+  const [primaryLink, setPrimaryLink] = useState(
+    initialValues?.primary_link ?? ""
+  );
+  const [secondaryLink, setSecondaryLink] = useState(
+    initialValues?.secondary_link ?? ""
+  );
   const [file, setFile] = useState<File | null>(null);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!file) return;
+    if (!isEditMode && !file) return;
 
     onSubmit({
       type: "project",
@@ -29,7 +48,7 @@ const ProjectForm = ({ onSubmit, loading }: ProjectFormProps) => {
       skill,
       primary_link: primaryLink,
       secondary_link: secondaryLink || null,
-      file,
+      file: file ?? undefined,
     });
   }
 
@@ -75,18 +94,22 @@ const ProjectForm = ({ onSubmit, loading }: ProjectFormProps) => {
       />
 
       <FileDropInput
-        label="صورة أو ملف توضيحي للمشروع"
+        label={
+          isEditMode
+            ? "صورة أو ملف توضيحي (اتركه فارغًا للإبقاء على الحالي)"
+            : "صورة أو ملف توضيحي للمشروع"
+        }
         file={file}
         onChange={setFile}
-        required
+        required={!isEditMode}
       />
 
       <button
         type="submit"
-        disabled={loading || !file}
+        disabled={loading || (!isEditMode && !file)}
         className="bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
       >
-        {loading ? "جاري النشر..." : "نشر المشروع"}
+        {loading ? "جاري النشر..." : submitLabel}
       </button>
     </form>
   );

@@ -7,17 +7,26 @@ import { FormInput } from "../forms/FormInput";
 type WorkFormProps = {
   onSubmit: (payload: CreateWorkPayload) => void;
   loading: boolean;
+  initialValues?: Omit<CreateWorkPayload, "type">;
+  submitLabel?: string;
 };
 
-const WorkForm = ({ onSubmit, loading }: WorkFormProps) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [skill, setSkill] = useState<string[]>([]);
-  const [location, setLocation] = useState("");
-  const [salaryRange, setSalaryRange] = useState("");
-  const [workPlace, setWorkPlace] = useState("");
-  const [contact, setContact] = useState("");
-  const [hours, setHours] = useState("");
+const WorkForm = ({
+  onSubmit,
+  loading,
+  initialValues,
+  submitLabel = "نشر فرصة العمل",
+}: WorkFormProps) => {
+  const [title, setTitle] = useState(initialValues?.title ?? "");
+  const [content, setContent] = useState(initialValues?.content ?? "");
+  const [skill, setSkill] = useState<string[]>(initialValues?.skill ?? []);
+  const [location, setLocation] = useState(initialValues?.location ?? "");
+  const [salaryRange, setSalaryRange] = useState(
+    initialValues?.salary_range ?? ""
+  );
+  const [workPlace, setWorkPlace] = useState(initialValues?.work_place ?? "");
+  const [contact, setContact] = useState(initialValues?.contact ?? "");
+  const [hours, setHours] = useState(initialValues?.hours ?? "");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -89,7 +98,7 @@ const WorkForm = ({ onSubmit, loading }: WorkFormProps) => {
         disabled={loading}
         className="bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
       >
-        {loading ? "جاري النشر..." : "نشر فرصة العمل"}
+        {loading ? "جاري النشر..." : submitLabel}
       </button>
     </form>
   );

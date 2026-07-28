@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import { getPostsRequest } from "../api/PostApi";
 import type { Post } from "../types/common/Post";
 import type { PostType } from "../types/common/PostType";
+import type { PostPagination } from "../types/forms/PostPagination";
 
-const useFetchPosts = (type: PostType, page: number = 1) => {
+const useFetchPosts = (
+  type: PostType,
+  page: number = 1,
+  search: string = ""
+) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [meta, setMeta] = useState<PostPagination<Post>["meta"] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [lastPage, setLastPage] = useState<number>(1);
 
   useEffect(() => {
     let cancelled = false;
@@ -16,12 +21,16 @@ const useFetchPosts = (type: PostType, page: number = 1) => {
       setLoading(true);
       setError("");
 
-      const response = await getPostsRequest({ type, page });
+      const response = await getPostsRequest({
+        type,
+        page,
+        search: search || undefined,
+      });
       if (cancelled) return;
 
       if ("data" in response) {
         setPosts(response.data);
-        setLastPage(response.meta.last_page);
+        setMeta(response.meta);
       } else {
         setError(response.message);
       }
@@ -34,9 +43,9 @@ const useFetchPosts = (type: PostType, page: number = 1) => {
     return () => {
       cancelled = true;
     };
-  }, [type, page]);
+  }, [type, page, search]);
 
-  return { posts, loading, error, lastPage };
+  return { posts, setPosts, meta, loading, error };
 };
 
 export default useFetchPosts;

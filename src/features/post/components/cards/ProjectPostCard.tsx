@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { FolderKanban, ExternalLink, ChevronDown } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import type { ProjectPost } from "../../types/kinds/ProjectPost";
@@ -7,15 +7,14 @@ import PostFooter from "./PostFooter";
 
 type ProjectPostCardProps = {
   post: ProjectPost;
+  deleteAction?: ReactNode;
 };
 
-// 1. تحديد عدد المهارات المرئية قبل التوسع
 const VISIBLE_SKILLS_COUNT = 3;
 
-const ProjectPostCard = ({ post }: ProjectPostCardProps) => {
+const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // 2. حساب المهارات المرئية والمتبقية
   const visibleSkills = isExpanded
     ? post.skill
     : post.skill.slice(0, VISIBLE_SKILLS_COUNT);
@@ -37,6 +36,7 @@ const ProjectPostCard = ({ post }: ProjectPostCardProps) => {
         userName={post.user.user_name}
         createdAt={post.created_at}
         showBookmark={true}
+        extraAction={deleteAction}
       />
 
       {/* -------- Title & Badge -------- */}

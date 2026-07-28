@@ -1,7 +1,10 @@
 import { Search } from "lucide-react";
 import SerchRabbitImage from "../../../assets/images/IconSearch.png";
+import { usePostSearchStore } from "../../store/usePostSearchStore";
 
 const SearchBar = () => {
+  const query = usePostSearchStore((state) => state.query);
+  const setQuery = usePostSearchStore((state) => state.setQuery);
   return (
     <div className="flex items-center">
       <div className="relative w-56 md:w-72 lg:w-96">
@@ -19,6 +22,8 @@ const SearchBar = () => {
 
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="ابحث عن منشور ما . . ."
           className="w-full py-2.5 pr-10 pl-3 text-sm text-gray-700 bg-gray-100 rounded-full border focus:ring-2 outline-0 focus:ring-[#dfd2f14a]"
         />
