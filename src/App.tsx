@@ -3,11 +3,12 @@ import LoginPage from "./features/auth/pages/LoginPage";
 import Dashbord from "./pages/Dashbord";
 import useAuthInit from "./features/auth/hooks/useAuthInit";
 import PostsPage from "./features/post/pages/PostsPage";
+import DashboardSkeleton from "./features/post/components/loading/DashboardSkeleton";
 const App = () => {
   const { isInit } = useAuthInit();
 
   if (isInit) {
-    return <div>جاري التحميل</div>;
+    return <DashboardSkeleton />;
   }
   return (
     <Routes>
