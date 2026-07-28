@@ -4,23 +4,20 @@ import { SideBar } from "../shared/components/common/SideBar";
 
 const Dashbord = () => {
   return (
-    <div className="min-h-screen bg-gray-50 rtl flex flex-col">
+    <div className="h-screen bg-gray-50 rtl flex flex-col overflow-hidden">
       {/* ---------- NavBar Header --------- */}
-      <header className="top-0 z-20 w-full">
+      <header className="shrink-0 z-20 w-full">
         <NavBar />
       </header>
 
       {/* ---------- SideBar & Content ---------- */}
-      {/* أضفنا w-full أو max-w لمنع التمدد الأفقي */}
-      <div className="flex flex-1 w-full">
-        {/* تم إصلاح الخطأ الإملائي وإغلاق القوس هكذا: h-[calc(100vh-80px)] mt-4 */}
-        <aside className="sticky top-16 h-[calc(100vh-80px)] mt-4 shrink-0">
+      <div className="flex flex-1 w-full overflow-hidden">
+        <aside className="shrink-0 overflow-y-auto">
           <SideBar />
         </aside>
 
         {/* ---------- Main Content --------- */}
         <main className="flex-1 p-6 overflow-y-auto">
-          {/* تم إزالة وسم h1 لأنه يسبب مشاكل في تنسيق الصفحات */}
           <Outlet />
         </main>
       </div>
