@@ -132,7 +132,17 @@ const PostOptionsMenu = ({
             disabled={loading}
             className="text-sm font-bold text-white bg-violet-600 hover:bg-violet-700 px-4 py-2 rounded-full transition-colors disabled:opacity-60"
           >
-            {loading ? "جاري الحذف..." : "حذف نهائيًا"}
+            {loading ? (
+              <div className="flex items-center gap-2">
+                {/* ✅ الـ Spinner بنفس فكرته لكن بلون أبيض ليتناسب مع الزر */}
+                <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+                <span>جاري الحذف</span>
+              </div>
+            ) : (
+              "حذف نهائيًا"
+            )}
+
+            {/* // {loading ? "جاري الحذف..." : "حذف نهائيًا"} */}
           </button>
         </ModalFooter>
       </Modal>

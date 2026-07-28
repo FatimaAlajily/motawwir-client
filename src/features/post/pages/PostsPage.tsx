@@ -8,6 +8,8 @@ import EditPostModal from "../components/ui/EditPostModal";
 import { usePostSearchStore } from "../../../shared/store/usePostSearchStore";
 import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
 import Pagination from "../components/inputs/Pagination";
+import LOADING_IMAGE from "../../../assets/images/rabitloadingsearch.png";
+import NO_RESULTS_IMAGE from "../../../assets/images/noresultfound.png";
 
 const PostsPage = () => {
   const { type } = useParams<{ type: string }>();
@@ -41,19 +43,53 @@ const PostsPage = () => {
     setEditingPost(null);
   }
 
+  // if (loading) {
+  //   return <p className="text-center text-gray-400 py-10">جاري التحميل...</p>;
+  // }
+
+  // if (error) {
+  //   return <p className="text-center text-red-500 py-10">{error}</p>;
+  // }
+
   if (loading) {
-    return <p className="text-center text-gray-400 py-10">جاري التحميل...</p>;
+    return (
+      <div className="flex flex-col items-center justify-center h-full py-20">
+        <img
+          src={LOADING_IMAGE}
+          alt="جاري البحث"
+          className="w-48 h-48 object-contain mb-4 animate-pulse"
+        />
+        <p className="text-gray-500 font-semibold text-sm">جاري البحث...</p>
+      </div>
+    );
   }
 
   if (error) {
     return <p className="text-center text-red-500 py-10">{error}</p>;
   }
 
+  // if (posts.length === 0) {
+  //   return (
+  //     <p className="text-center text-gray-400 py-10">
+  //       لا توجد منشورات في هذا القسم حتى الآن
+  //     </p>
+  //   );
+  // }
+
   if (posts.length === 0) {
     return (
-      <p className="text-center text-gray-400 py-10">
-        لا توجد منشورات في هذا القسم حتى الآن
-      </p>
+      <div className="flex flex-col items-center justify-center h-full py-20">
+        <img
+          src={NO_RESULTS_IMAGE}
+          alt="لا توجد نتائج"
+          className="w-48 h-48 object-contain mb-4"
+        />
+        <p className="text-gray-500 font-semibold text-sm">
+          {searchQuery
+            ? "لم يتم إيجاد نتائج مطابقة لبحثك"
+            : "لا توجد منشورات في هذه الصفحة حتى الآن"}
+        </p>
+      </div>
     );
   }
 

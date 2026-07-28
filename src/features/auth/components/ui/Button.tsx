@@ -13,7 +13,14 @@ export function ButtonComponent({ text, loading, type = "submit" }: But) {
         backgroundImage: "linear-gradient(135deg, #4b1e8a 0%, #8e52dc 100%)",
       }}
     >
-      {loading ? "جاري التسجيل" : text}
+      {loading ? (
+        <div className="flex items-center justify-center gap-2">
+          <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+          <span>جاري التسجيل...</span>
+        </div>
+      ) : (
+        text
+      )}
     </Button>
   );
 }

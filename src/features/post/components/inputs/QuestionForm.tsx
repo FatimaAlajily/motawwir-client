@@ -46,9 +46,16 @@ const QuestionForm = ({
       <button
         type="submit"
         disabled={loading}
-        className="bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
+        className="flex items-center justify-center bg-[#6620F3] hover:bg-[#6620f3e4] text-white font-semibold py-2.5 rounded-xl disabled:opacity-60"
       >
-        {loading ? "جاري النشر..." : submitLabel}
+        {loading ? (
+          <div className="flex items-center gap-5">
+            <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+            <span>جاري النشر...</span>
+          </div>
+        ) : (
+          submitLabel
+        )}
       </button>
     </form>
   );
