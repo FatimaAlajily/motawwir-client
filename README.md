@@ -39,6 +39,10 @@
 
 - import this server in the api folder when you use it
 
+## 10- Zustand => npm install zustand
+
+## 11 - Lottie React => npm install lottie-react
+
 ## Requirements :
 
 - Node.js 22.20.0
