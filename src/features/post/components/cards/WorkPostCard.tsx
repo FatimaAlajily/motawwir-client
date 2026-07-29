@@ -6,12 +6,15 @@ import PostFooter from "./PostFooter";
 type WorkPostCardProps = {
   post: WorkPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const WorkPostCard = ({ post, deleteAction }: WorkPostCardProps) => {
+const WorkPostCard = ({ post, deleteAction , isOwner}: WorkPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [votes, setVotes] = useState(post.votes);
+
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -146,10 +149,14 @@ const WorkPostCard = ({ post, deleteAction }: WorkPostCardProps) => {
       <hr className="border-gray-100 mt-1.5 mb-1.5" />
 
       {/* -------- Footer -------- */}
-      <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
+     <PostFooter
+      postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
+        commentsLabel="الأجوبة"
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
     </div>
   );

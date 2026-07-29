@@ -14,19 +14,17 @@ type PostCardProps = {
   onEdit: (post: Post) => void;
 };
 
-// ✅ تعديل الأحجام لتكون متجاوبة (على الجوال تأخذ العرض الكامل 6)
 const COL_SPAN_MAP: Record<PostType, string> = {
-  question: "col-span-6", // العرض الكامل دائماً
-  work: "col-span-6", // العرض الكامل دائماً
-  new: "col-span-6", // العرض الكامل دائماً
-  project: "col-span-6 md:col-span-3", // جوال: كامل / تابلت وأعلى: نصف العرض (بطاقتين)
-  team: "col-span-6 md:col-span-3 lg:col-span-2", // جوال: كامل / تابلت: نصف العرض / كمبيوتر: ثلث العرض (3 بطاقات)
+  question: "col-span-6",
+  work: "col-span-6",
+  new: "col-span-6",
+  project: "col-span-6 md:col-span-3",
+  team: "col-span-6 md:col-span-3 lg:col-span-2",
 };
 
 const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
   const currentUser = useAuthStore((state) => state.user);
   const isOwner = currentUser?.id === post.user.id;
-
   const spanClass = COL_SPAN_MAP[post.type] || "col-span-6";
 
   const menuAction = isOwner ? (
@@ -40,15 +38,45 @@ const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
   function renderCard() {
     switch (post.type) {
       case "question":
-        return <QuestionPostCard post={post} deleteAction={menuAction} />;
+        return (
+          <QuestionPostCard
+            post={post}
+            deleteAction={menuAction}
+            isOwner={isOwner} // ✅
+          />
+        );
       case "work":
-        return <WorkPostCard post={post} deleteAction={menuAction} />;
+        return (
+          <WorkPostCard
+            post={post}
+            deleteAction={menuAction}
+            isOwner={isOwner} // ✅
+          />
+        );
       case "new":
-        return <NewPostCard post={post} deleteAction={menuAction} />;
+        return (
+          <NewPostCard
+            post={post}
+            deleteAction={menuAction}
+            isOwner={isOwner} // ✅
+          />
+        );
       case "project":
-        return <ProjectPostCard post={post} deleteAction={menuAction} />;
+        return (
+          <ProjectPostCard
+            post={post}
+            deleteAction={menuAction}
+            isOwner={isOwner} // ✅
+          />
+        );
       case "team":
-        return <TeamPostCard post={post} deleteAction={menuAction} />;
+        return (
+          <TeamPostCard
+            post={post}
+            deleteAction={menuAction}
+            isOwner={isOwner} // ✅
+          />
+        );
       default:
         return null;
     }

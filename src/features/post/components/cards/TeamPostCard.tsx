@@ -7,12 +7,15 @@ import PostFooter from "./PostFooter";
 type TeamPostCardProps = {
   post: TeamPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
+const TeamPostCard = ({ post, deleteAction , isOwner }: TeamPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [votes, setVotes] = useState(post.votes);
+
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -119,11 +122,13 @@ const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
-        showAI={false}
-        commentsLabel="التعليقات"
+      postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
+        commentsLabel="الأجوبة"
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
     </div>
   );

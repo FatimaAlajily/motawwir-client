@@ -8,12 +8,15 @@ import PostFooter from "./PostFooter";
 type ProjectPostCardProps = {
   post: ProjectPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
+const ProjectPostCard = ({ post, deleteAction , isOwner}: ProjectPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+    const [votes, setVotes] = useState(post.votes);
+
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -26,7 +29,6 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
   return (
     <div
       dir="rtl"
-      // 3. إضافة h-full و flex flex-col لجعل البطاقة تتمدد عمودياً
       className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow w-full overflow-hidden h-full flex flex-col"
       style={{ fontFamily: "'Tajawal', sans-serif" }}
     >
@@ -58,7 +60,6 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
         </div>
       )}
 
-      {/* 4. حاوية flex-1 لاحتواء المحتوى المتغير ودمج المساحة الفارغة */}
       <div className="flex-1 flex flex-col">
         {/* -------- Content -------- */}
         <div className="mb-2.5">
@@ -69,7 +70,6 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
           >
             {post.content}
           </p>
-          {/* زر التوسيع يظهر إذا كان هناك نص طويل أو مهارات مخفية */}
           {(post.content.length > 100 || remainingSkillsCount > 0) && (
             <button
               type="button"
@@ -98,7 +98,6 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
                 {skill}
               </span>
             ))}
-            {/* إظهار عدد المهارات المخفية */}
             {!isExpanded && remainingSkillsCount > 0 && (
               <span className="text-[10px] font-bold text-[#6620F3]">
                 +{remainingSkillsCount}
@@ -109,7 +108,6 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
 
         {/* -------- Links -------- */}
         <div className="flex items-center gap-2 mt-auto mb-3">
-          {/* استخدمنا mt-auto لدفع الأزرار للأسفل دائماً */}
           <a
             href={post.primary_link}
             target="_blank"
@@ -134,13 +132,15 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
         </div>
       </div>
 
-      {/* الـ Footer سيكون دائماً في أسفل البطاقة بغض النظر عن طول المحتوى */}
       <hr className="border-gray-100 mb-1.5" />
       <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
-        commentsLabel="التعليقات"
+      postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
+        commentsLabel="الأجوبة"
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
     </div>
   );
