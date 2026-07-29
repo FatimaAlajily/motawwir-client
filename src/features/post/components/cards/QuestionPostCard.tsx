@@ -7,10 +7,12 @@ import "../../../../styles/theme.css";
 type QuestionPostCardProps = {
   post: QuestionPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
-const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
+const QuestionPostCard = ({ post, deleteAction , isOwner}: QuestionPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [votes, setVotes] = useState(post.votes);
 
   return (
     <div
@@ -59,10 +61,13 @@ const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
+      postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
         commentsLabel="الأجوبة"
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
     </div>
   );
