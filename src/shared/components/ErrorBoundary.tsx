@@ -16,7 +16,7 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    // يطبعها بالـ console عشان يظهر الخطأ الحقيقي بدل ما تختفي الصفحة بصمت
+    // يطبعها بالـ console عشان يظهر الخطأ 
     console.error("ErrorBoundary caught:", error, info.componentStack);
   }
 
@@ -34,9 +34,6 @@ export default class ErrorBoundary extends Component<Props, State> {
           }}
         >
           <h2 style={{ fontWeight: 800, marginBottom: 8 }}>صار خطأ غير متوقع</h2>
-          <p style={{ marginBottom: 12 }}>
-            هذا النص يظهر بدل الصفحة البيضاء عشان تعرف السبب بالضبط:
-          </p>
           <pre style={{ whiteSpace: "pre-wrap", fontSize: 13 }}>
             {this.state.error.message}
           </pre>

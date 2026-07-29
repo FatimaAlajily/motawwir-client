@@ -28,7 +28,7 @@ export function Input({
         onChange={(e) => setText(e.target.value)}
         placeholder={placeholder}
         rows={1}
-        className="flex-1 resize-none bg-[#FAF8FF] border border-purple-200 focus:border-[#6C5CE7] outline-none rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 transition-colors"
+        className="flex-1 resize-none bg-[#EFEFF1] border border-purple-200 focus:border-[#6C5CE7] outline-none rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 transition-colors"
       />
       <div className="flex items-center gap-1.5 pt-0.5">
         {onCancel && (
