@@ -33,7 +33,7 @@ const RegisterForm = () => {
     });
 
     if (response.status === "success") {
-      navigate("/login");
+      navigate("/");
     }
   }
 
@@ -107,7 +107,7 @@ const RegisterForm = () => {
       <div className="text-center text-sm text-gray-600 mt-2">
         لديك حساب بالفعل؟{" "}
         <Link
-          to="/login"
+          to="/"
           className="text-purple-700 font-semibold hover:underline"
         >
           تسجيل الدخول
