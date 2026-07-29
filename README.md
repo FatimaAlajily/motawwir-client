@@ -41,7 +41,11 @@
 
 ## 10- Zustand => npm install zustand
 
-## 11 - Lottie React => npm install lottie-react
+## 11- react Icons-> npm install react-icons
+
+- import this package in your file component
+
+
 
 ## Requirements :
 
