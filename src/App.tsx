@@ -8,6 +8,7 @@ import Dashbord from "./pages/Dashbord";
 import useAuthInit from "./features/auth/hooks/useAuthInit";
 import PostsPage from "./features/post/pages/PostsPage";
 import DashboardSkeleton from "./features/post/components/loading/DashboardSkeleton";
+import ChatPage from "./features/chat/pages/ChatPage";
 const App = () => {
   const { isInit } = useAuthInit();
 
@@ -16,18 +17,17 @@ const App = () => {
   }
   return (
     // <ErrorBoundary>
-      <Routes>
+    <Routes>
       <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       <Route path="/dashbord" element={<Dashbord />}>
         <Route path="posts/:type" element={<PostsPage />} />
+        <Route path="chat" element={<ChatPage />} />
       </Route>
 
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/Editprofile" element={<ProfileEditPage />} />
-      
-   
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/Editprofile" element={<ProfileEditPage />} />
     </Routes>
     // {/* </ErrorBoundary> */}
   );
