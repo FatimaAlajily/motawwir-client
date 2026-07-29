@@ -1,11 +1,9 @@
 // const BASE_URL = import.meta.env.VITE_API_URL;
-
 import axios, { AxiosError } from "axios";
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:8000/api",
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
   },
 });
@@ -18,6 +16,12 @@ axiosClient.interceptors.request.use(
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // ✅ نضبط Content-Type يدويًا فقط للطلبات التي ليست FormData
+    // (لأن FormData يجب أن يُترك للمتصفح ليضبط الـ boundary تلقائيًا)
+    if (!(config.data instanceof FormData)) {
+      config.headers["Content-Type"] = "application/json";
     }
 
     return config;
@@ -38,19 +42,15 @@ axiosClient.interceptors.response.use(
         case 403:
           console.error("Forbidden");
           break;
-
         case 404:
           console.error("Resource Not Found");
           break;
-
         case 422:
           console.error("Validation Error");
           break;
-
         case 500:
           console.error("Internal Server Error");
           break;
-
         default:
           console.error("Unexpected Error");
       }

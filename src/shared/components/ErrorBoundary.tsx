@@ -16,7 +16,6 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    // يطبعها بالـ console عشان يظهر الخطأ 
     console.error("ErrorBoundary caught:", error, info.componentStack);
   }
 

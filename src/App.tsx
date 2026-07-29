@@ -1,22 +1,35 @@
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
-import LoadingPage from "./features/auth/pages/LoadingPage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
 import ProfileEditPage from "./features/profile/pages/ProfileEditPage";
-import ErrorBoundary from "./shared/components/ErrorBoundary";
-
+// import ErrorBoundary from "./shared/components/ErrorBoundary";
+import Dashbord from "./pages/Dashbord";
+import useAuthInit from "./features/auth/hooks/useAuthInit";
+import PostsPage from "./features/post/pages/PostsPage";
+import DashboardSkeleton from "./features/post/components/loading/DashboardSkeleton";
 const App = () => {
+  const { isInit } = useAuthInit();
+
+  if (isInit) {
+    return <DashboardSkeleton />;
+  }
   return (
-    <ErrorBoundary>
+    // <ErrorBoundary>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/loading" element={<LoadingPage />} />
+
+      <Route path="/dashbord" element={<Dashbord />}>
+        <Route path="posts/:type" element={<PostsPage />} />
+      </Route>
+
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/Editprofile" element={<ProfileEditPage />} />
-      </Routes>
-    </ErrorBoundary>
+      
+   
+    </Routes>
+    // {/* </ErrorBoundary> */}
   );
 };
 

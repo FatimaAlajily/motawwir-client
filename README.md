@@ -41,9 +41,11 @@
 
 ## 10- Zustand => npm install zustand
 
-## 11- react cons-> npm install react-icons
+## 11- react Icons-> npm install react-icons
 
 - import this package in your file component
+
+
 
 ## Requirements :
 
