@@ -18,8 +18,6 @@ axiosClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // ✅ نضبط Content-Type يدويًا فقط للطلبات التي ليست FormData
-    // (لأن FormData يجب أن يُترك للمتصفح ليضبط الـ boundary تلقائيًا)
     if (!(config.data instanceof FormData)) {
       config.headers["Content-Type"] = "application/json";
     }

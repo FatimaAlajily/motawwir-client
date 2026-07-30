@@ -3,17 +3,24 @@ import type { QuestionPost } from "../../types/kinds/QuestionPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 import "../../../../styles/theme.css";
-import { usePostComments } from "../../hooks/usePostComments"; 
-import CommentSection from "../../../comment/components/common/CommentSection"; 
+import { usePostComments } from "../../hooks/usePostComments";
+import CommentSection from "../../../comment/components/common/CommentSection";
 
 type QuestionPostCardProps = {
   post: QuestionPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
-const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
+const QuestionPostCard = ({
+  post,
+  deleteAction,
+  isOwner,
+}: QuestionPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const comments = usePostComments(post.id); // + جديد
+  const comments = usePostComments(post.id);
+  const [votes, setVotes] = useState(post.votes);
+
   return (
     <div
       dir="rtl"
@@ -61,11 +68,14 @@ const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
+        postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
         commentsLabel="الأجوبة"
-        onCommentsClick={comments.toggle} // + جديد
+        onCommentsClick={comments.toggle}
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
       {comments.show && (
         <>

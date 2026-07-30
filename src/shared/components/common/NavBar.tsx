@@ -15,7 +15,6 @@ type NavBarProps = {
 export function NavBar({ onMenuClick }: NavBarProps) {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
-  // -------- حالة البحث الموسّع على الموبايل: يستبدل كل شيء بشريط بحث كامل العرض --------
   if (isMobileSearchOpen) {
     return (
       <div className="bg-white px-3 py-2.5 shadow-sm border-b border-gray-100 flex items-center gap-2">
@@ -36,7 +35,7 @@ export function NavBar({ onMenuClick }: NavBarProps) {
 
   return (
     <div className="bg-white px-3 md:px-6 py-2.5 shadow-sm border-b border-gray-100 flex items-center gap-2 md:gap-4">
-      {/* -------- يمين: زر ☰ (موبايل فقط) + الشعار -------- */}
+      {/* --------------- menu button ------------- */}
       <div className="flex items-center gap-2 shrink-0">
         <button
           type="button"
@@ -60,14 +59,12 @@ export function NavBar({ onMenuClick }: NavBarProps) {
         </span>
       </div>
 
-      {/* -------- الوسط: البحث (كامل على md+، أيقونة فقط على الموبايل) -------- */}
       <div className="flex-1 min-w-0 flex justify-center">
-        {/* على md+: شريط بحث كامل */}
+        {/* ----------Search bar ----------------- */}
         <div className="hidden md:block w-full max-w-md">
           <SearchBar />
         </div>
 
-        {/* على الموبايل: أيقونة فقط، تفتح البحث الموسّع */}
         <button
           type="button"
           onClick={() => setIsMobileSearchOpen(true)}
@@ -78,7 +75,6 @@ export function NavBar({ onMenuClick }: NavBarProps) {
         </button>
       </div>
 
-      {/* -------- يسار: الإجراءات -------- */}
       <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
         <CreateButton />
         <NotificationBar />

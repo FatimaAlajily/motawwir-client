@@ -3,19 +3,21 @@ import { Bookmark, ArrowLeft, ChevronDown } from "lucide-react";
 import type { TeamPost } from "../../types/kinds/TeamPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { usePostComments } from "../../hooks/usePostComments"; 
-import CommentSection from "../../../comment/components/common/CommentSection"; 
+import { usePostComments } from "../../hooks/usePostComments";
+import CommentSection from "../../../comment/components/common/CommentSection";
 
 type TeamPostCardProps = {
   post: TeamPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
+const TeamPostCard = ({ post, deleteAction, isOwner }: TeamPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const comments = usePostComments(post.id); // + جديد
+  const comments = usePostComments(post.id);
+  const [votes, setVotes] = useState(post.votes);
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -122,22 +124,25 @@ const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
         showAI={false}
         commentsLabel="التعليقات"
-        onCommentsClick={comments.toggle} // + جديد
+        onCommentsClick={comments.toggle}
+        postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
       {comments.show && (
-  <>
-    <hr className="border-gray-100 my-2" />
-    <CommentSection
-      target={comments.target}
-      currentUserId={comments.currentUserId}
-    />
-  </>
-)}
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

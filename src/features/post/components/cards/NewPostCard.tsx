@@ -7,6 +7,7 @@ import PostFooter from "./PostFooter";
 type NewPostCardProps = {
   post: NewPost;
   deleteAction?: ReactNode;
+  isOwner?: boolean;
 };
 
 const VIDEO_EXTENSIONS = ["mp4", "webm", "ogg", "mov"];
@@ -16,8 +17,10 @@ function isVideoFile(url: string): boolean {
   return VIDEO_EXTENSIONS.includes(extension);
 }
 
-const NewPostCard = ({ post, deleteAction }: NewPostCardProps) => {
+const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [votes, setVotes] = useState(post.votes);
+
 
   const hasFile = Boolean(post.file);
   const isVideo = post.file ? isVideoFile(post.file) : false;
@@ -101,10 +104,13 @@ const NewPostCard = ({ post, deleteAction }: NewPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-        upvotes={post.votes.upvotes}
-        downvotes={post.votes.downvotes}
-        ai={post.votes.ai}
+      postId={post.id}
+        upvotes={votes.upvotes}
+        downvotes={votes.downvotes}
+        ai={votes.ai}
         commentsLabel="الأجوبة"
+        onVoteSuccess={setVotes}
+        isOwner={isOwner}
       />
     </div>
   );

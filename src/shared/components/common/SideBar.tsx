@@ -50,9 +50,8 @@ export function SideBar({ onNavigate }: SideBarProps) {
     >
       <SidebarItems className="flex flex-col h-full">
         <SidebarItemGroup className="space-y-1.5 mt-6 flex-1">
-          {/* ✅ المرور على الروابط وتوليدها */}
           {NAV_LINKS.map((link) => {
-            const isActive = pathname === link.to; // فحص إذا كانت الصفحة الحالية هي نفسها الرابط
+            const isActive = pathname === link.to;
             return (
               <Link key={link.to} to={link.to} onClick={onNavigate}>
                 <SidebarItem
@@ -63,7 +62,6 @@ export function SideBar({ onNavigate }: SideBarProps) {
                       size={16}
                     />
                   )}
-                  // ✅ تطبيق الكلاسات ديناميكياً
                   className={`font-semibold rounded-full ${
                     isActive
                       ? "bg-[#e5e5f8] text-[#4b1e8a] hover:bg-[#e5e5f8]"
@@ -92,7 +90,7 @@ export function SideBar({ onNavigate }: SideBarProps) {
               className="h-24 w-24 object-contain"
             />
           </div>
-          <Link to={"/login"} onClick={onNavigate}>
+          <Link to={"/"} onClick={onNavigate}>
             <SidebarItem
               icon={() => (
                 <SideBarIcons icon={LogOut} color={"text-[4b1e8a]"} size={16} />
