@@ -18,6 +18,8 @@ export function CommentList({ comments = [], currentUserId, onEdit, onDelete }: 
     );
   }
 
+  
+
   return (
     <div className="divide-y divide-gray-100">
       {comments.map((comment) => (

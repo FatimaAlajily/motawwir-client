@@ -2,6 +2,8 @@ import { useState, type ReactNode } from "react";
 import type { WorkPost } from "../../types/kinds/WorkPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import { usePostComments } from "../../hooks/usePostComments"; 
+import CommentSection from "../../../comment/components/common/CommentSection"; 
 
 type WorkPostCardProps = {
   post: WorkPost;
@@ -12,6 +14,7 @@ const VISIBLE_SKILLS_COUNT = 3;
 
 const WorkPostCard = ({ post, deleteAction }: WorkPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const comments = usePostComments(post.id); // + جديد
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -150,7 +153,17 @@ const WorkPostCard = ({ post, deleteAction }: WorkPostCardProps) => {
         upvotes={post.votes.upvotes}
         downvotes={post.votes.downvotes}
         ai={post.votes.ai}
+        onCommentsClick={comments.toggle} // + جديد
       />
+      {comments.show && (
+  <>
+    <hr className="border-gray-100 my-2" />
+    <CommentSection
+      target={comments.target}
+      currentUserId={comments.currentUserId}
+    />
+  </>
+)}
     </div>
   );
 };

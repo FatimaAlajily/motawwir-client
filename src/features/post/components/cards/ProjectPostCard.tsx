@@ -4,7 +4,8 @@ import { FaGithub } from "react-icons/fa";
 import type { ProjectPost } from "../../types/kinds/ProjectPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-
+import { usePostComments } from "../../hooks/usePostComments"; 
+import CommentSection from "../../../comment/components/common/CommentSection"; 
 type ProjectPostCardProps = {
   post: ProjectPost;
   deleteAction?: ReactNode;
@@ -14,6 +15,7 @@ const VISIBLE_SKILLS_COUNT = 3;
 
 const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const comments = usePostComments(post.id); // + جديد
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -141,7 +143,18 @@ const ProjectPostCard = ({ post, deleteAction }: ProjectPostCardProps) => {
         downvotes={post.votes.downvotes}
         ai={post.votes.ai}
         commentsLabel="التعليقات"
+        onCommentsClick={comments.toggle}
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
+
     </div>
   );
 };

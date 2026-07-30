@@ -3,6 +3,8 @@ import { Bookmark, ArrowLeft, ChevronDown } from "lucide-react";
 import type { TeamPost } from "../../types/kinds/TeamPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import { usePostComments } from "../../hooks/usePostComments"; 
+import CommentSection from "../../../comment/components/common/CommentSection"; 
 
 type TeamPostCardProps = {
   post: TeamPost;
@@ -13,6 +15,7 @@ const VISIBLE_SKILLS_COUNT = 3;
 
 const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const comments = usePostComments(post.id); // + جديد
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -124,7 +127,17 @@ const TeamPostCard = ({ post, deleteAction }: TeamPostCardProps) => {
         ai={post.votes.ai}
         showAI={false}
         commentsLabel="التعليقات"
+        onCommentsClick={comments.toggle} // + جديد
       />
+      {comments.show && (
+  <>
+    <hr className="border-gray-100 my-2" />
+    <CommentSection
+      target={comments.target}
+      currentUserId={comments.currentUserId}
+    />
+  </>
+)}
     </div>
   );
 };

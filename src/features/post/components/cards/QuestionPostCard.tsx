@@ -3,6 +3,8 @@ import type { QuestionPost } from "../../types/kinds/QuestionPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 import "../../../../styles/theme.css";
+import { usePostComments } from "../../hooks/usePostComments"; 
+import CommentSection from "../../../comment/components/common/CommentSection"; 
 
 type QuestionPostCardProps = {
   post: QuestionPost;
@@ -11,7 +13,7 @@ type QuestionPostCardProps = {
 
 const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const comments = usePostComments(post.id); // + جديد
   return (
     <div
       dir="rtl"
@@ -63,7 +65,17 @@ const QuestionPostCard = ({ post, deleteAction }: QuestionPostCardProps) => {
         downvotes={post.votes.downvotes}
         ai={post.votes.ai}
         commentsLabel="الأجوبة"
+        onCommentsClick={comments.toggle} // + جديد
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
 import type { Comment } from "../../types/comment/Comment";
 import { CommentAvatar } from "../ui/Avatar";
 import { Input } from "../ui/Input";
-import { Bubble as CommentBubble } from "../ui/BubbleProps"; // استيراد المكون بالاسم الجديد وتعديل مساره
+import { Bubble as CommentBubble } from "../ui/BubbleProps";
+import { OptionsMenu } from "../ui/OptionsMenu";
+import { Bot, MoveDown, MoveUp } from "lucide-react";
 
 type Props = {
   comment: Comment;
@@ -26,13 +27,24 @@ function timeAgo(dateString: string) {
   return `منذ ${days} يوم`;
 }
 
-export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
+export function CommentItem({
+  comment,
+  isOwner,
+  onEdit,
+  onDelete,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleEdit(text: string) {
-    const res = (await onEdit(comment.id, text)) as { status?: string };
-    if (res?.status !== "error") setIsEditing(false);
+    const res = (await onEdit(comment.id, text)) as {
+      status?: string;
+    };
+
+    if (res?.status !== "error") {
+      setIsEditing(false);
+    }
+
     return res;
   }
 
@@ -44,12 +56,24 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
 
   return (
     <div className="flex items-start gap-3 py-4">
-      <CommentAvatar src={comment.user.avatar} alt={comment.user.user_name} />
+      <CommentAvatar
+        src={comment.user.avatar}
+        alt={comment.user.user_name}
+      />
 
       <div className="flex-1 min-w-0">
-        <CommentBubble 
-          userName={comment.user.user_name} 
+        <CommentBubble
+          userName={comment.user.user_name}
           createdAt={timeAgo(comment.created_at)}
+          actions={
+            isOwner && !isEditing ? (
+              <OptionsMenu
+                onEdit={() => setIsEditing(true)}
+                onDelete={handleDelete}
+                loading={isDeleting}
+              />
+            ) : undefined
+          }
         >
           {isEditing ? (
             <div className="mt-2">
@@ -60,35 +84,31 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
               />
             </div>
           ) : (
-            <p className="text-sm text-gray-700 mt-1 whitespace-pre-line break-words overflow-hidden">
-              {comment.text}
-            </p>
+            <>
+              <p className="mt-1 whitespace-pre-line break-words text-sm text-gray-700">
+                {comment.text}
+              </p>
+
+              {/* تصميم أزرار التصويت والتفاعل فقط */}
+              <div className="flex items-center justify-start font-medium gap-4 text-[10px] text-[#6F7C8D] mt-3 pt-2 border-t border-gray-100">
+                <button className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+                  <MoveUp size={13} className="text-[#4B1E8A]" />
+                  دعم (0)
+                </button>
+
+                <button className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+                  <MoveDown size={13} className="text-[#4B1E8A]" />
+                  رفض (0)
+                </button>
+
+                <div className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+                  <Bot size={13} className="text-[#4B1E8A]" />
+                  ذكاء اصطناعي (0)
+                </div>
+              </div>
+            </>
           )}
         </CommentBubble>
-
-        {!isEditing && (
-          <div className="flex items-center gap-4 px-2 mt-1.5">
-            {isOwner && (
-              <>
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-[#6C5CE7] transition-colors"
-                >
-                  <Pencil size={13} />
-                  تعديل
-                </button>
-                <button
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
-                >
-                  <Trash2 size={13} />
-                  {isDeleting ? "جاري الحذف..." : "حذف"}
-                </button>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
