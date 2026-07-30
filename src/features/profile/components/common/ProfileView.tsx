@@ -24,12 +24,16 @@ type ProfileUI = Profile & {
   commentsCount?: number;
 };
 
-export default function ProfileView() {
-  const { profile, fetching, error } = useProfile();
-  const [activeTab, setActiveTab] = useState<TabType>("echo");
-  const isOwner = true;
+type Props = {
+  // لو ما وصل (يعني ما فيه :id بالرابط) فهذا يعني "بروفايلي أنا"
+  userId?: string;
+};
 
-  // آيدي المستخدم المسجّل دخوله حالياً، من نفس الستور اللي يستخدمه useLogin
+export default function ProfileView({ userId }: Props) {
+  const { profile, fetching, error } = useProfile(userId);
+  const [activeTab, setActiveTab] = useState<TabType>("echo");
+
+  // آيدي المستخدم المسجّل دخوله حالياً
   const currentUserId = useAuthStore((state) => state.user?.id);
 
   if (fetching) {
@@ -54,6 +58,9 @@ export default function ProfileView() {
     postsCount: 0,
     commentsCount: 0,
   };
+
+  // "صاحب البروفايل" = ما فيه userId بالرابط (يعني بروفايلي)، أو آيدي البروفايل يطابق آيدي المستخدم الحالي
+  const isOwner = !userId || uiProfile.user?.id === currentUserId;
 
   return (
     <div

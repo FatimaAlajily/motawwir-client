@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getProfileRequest, updateProfileRequest } from "../api/ProfileApi";
 import type { Profile, UpdateProfilePayload } from "../types/user/Profile";
 
-const useProfile = () => {
+const useProfile = (userId?: string | number) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [fetching, setFetching] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const useProfile = () => {
       setFetching(true);
       setError("");
 
-      const response = await getProfileRequest();
+      const response = await getProfileRequest(userId);
 
       if (response.status === "success") {
         setProfile(response.data);
@@ -24,7 +24,8 @@ const useProfile = () => {
 
       setFetching(false);
     })();
-  }, []);
+    // نعيد الجلب كل ما تغيّر userId (يعني لما تنقلي بين بروفايلات مختلفة)
+  }, [userId]);
 
   async function handleUpdate(payload: UpdateProfilePayload) {
     setLoading(true);

@@ -7,6 +7,7 @@ import ProfileEditPage from "./features/profile/pages/ProfileEditPage";
 import Dashbord from "./pages/Dashbord";
 import useAuthInit from "./features/auth/hooks/useAuthInit";
 import PostsPage from "./features/post/pages/PostsPage";
+import UsersPage from "./features/users/pages/UsersPage"; // 
 import DashboardSkeleton from "./features/post/components/loading/DashboardSkeleton";
 const App = () => {
   const { isInit } = useAuthInit();
@@ -22,9 +23,10 @@ const App = () => {
 
       <Route path="/dashbord" element={<Dashbord />}>
         <Route path="posts/:type" element={<PostsPage />} />
+         <Route path="users" element={<UsersPage />} /> 
       </Route>
 
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/Editprofile" element={<ProfileEditPage />} />
       
    

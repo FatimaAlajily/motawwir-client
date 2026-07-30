@@ -7,9 +7,14 @@ import type {
   UpdateProfilePayload,
 } from "../types/user/Profile";
 
-export async function getProfileRequest(): Promise<ApiResponse<Profile>> {
+export async function getProfileRequest(
+  userId?: string | number
+): Promise<ApiResponse<Profile>> {
   try {
-    const response = await axiosClient.get<ApiSuccess<Profile>>("profile");
+    // لو فيه userId (نشوف بروفايل شخص ثاني) نستخدم "/profile/{id}"،
+    // وإلا "/profile" العادي يرجع بروفايل المستخدم المسجّل دخوله
+    const url = userId ? `profile/${userId}` : "profile";
+    const response = await axiosClient.get<ApiSuccess<Profile>>(url);
     return response.data;
   } catch (error) {
     return HandleApiError(error);
@@ -21,7 +26,6 @@ export async function updateProfileRequest(
 ): Promise<ApiResponse<Profile>> {
   try {
     const formData = new FormData();
-    // formData.append("_method", "PUT");
 
     Object.entries(payload).forEach(([key, value]) => {
       if (value === undefined || value === null) return;
