@@ -1,5 +1,6 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
+import axiosClient from "../../../shared/api/ClientApi";
 
 window.Pusher = Pusher;
 
@@ -13,6 +14,23 @@ const echo = new Echo({
   wssPort: 8080,
   forceTLS: false,
   enabledTransports: ["ws", "wss"],
+
+  authorizer: (channel: string) => {
+    return {
+      authorize: (
+        socketId: string,
+        callback: (error: Error | null, data: unknown) => void
+      ) => {
+        axiosClient
+          .post("/broadcasting/auth", {
+            socket_id: socketId,
+            channel_name: channel.name,
+          })
+          .then((response) => callback(null, response.data))
+          .catch((error) => callback(error, error));
+      },
+    };
+  },
 });
 
 export default echo;
