@@ -2,6 +2,8 @@ import { useState, type ReactNode } from "react";
 import type { WorkPost } from "../../types/kinds/WorkPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import { usePostComments } from "../../hooks/usePostComments";
+import CommentSection from "../../../comment/components/common/CommentSection";
 
 type WorkPostCardProps = {
   post: WorkPost;
@@ -11,10 +13,10 @@ type WorkPostCardProps = {
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const WorkPostCard = ({ post, deleteAction , isOwner}: WorkPostCardProps) => {
+const WorkPostCard = ({ post, deleteAction, isOwner }: WorkPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const comments = usePostComments(post.id);
   const [votes, setVotes] = useState(post.votes);
-
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -149,15 +151,25 @@ const WorkPostCard = ({ post, deleteAction , isOwner}: WorkPostCardProps) => {
       <hr className="border-gray-100 mt-1.5 mb-1.5" />
 
       {/* -------- Footer -------- */}
-     <PostFooter
-      postId={post.id}
+      <PostFooter
+        postId={post.id}
         upvotes={votes.upvotes}
         downvotes={votes.downvotes}
         ai={votes.ai}
-        commentsLabel="الأجوبة"
+        commentsLabel="التعليقات"
         onVoteSuccess={setVotes}
         isOwner={isOwner}
+        onCommentsClick={comments.toggle}
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

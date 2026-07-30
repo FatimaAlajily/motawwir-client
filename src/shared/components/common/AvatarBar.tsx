@@ -43,7 +43,7 @@ const AvatarBar = () => {
 
       <DropdownItem
         className="text-mutted font-bold cursor-pointer"
-        onClick={() => navigate("/profile")}
+        onClick={() => navigate(`/profile/${user?.id}`)}
       >
         حساب المستخدم
       </DropdownItem>

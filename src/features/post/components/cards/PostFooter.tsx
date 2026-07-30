@@ -3,11 +3,12 @@ import type { VoteDetails } from "../../../../shared/types/VoteDetails";
 import useVote from "../../../votes/hooks/useVote";
 
 type PostFooterProps = VoteDetails & {
-  postId: number; 
-  onVoteSuccess?: (votes: VoteDetails) => void; 
+  postId: number;
+  onVoteSuccess?: (votes: VoteDetails) => void;
   showAI?: boolean;
   commentsLabel?: string;
-   isOwner?: boolean;
+  onCommentsClick?: () => void; // جديد
+  isOwner?: boolean;
 };
 
 const PostFooter = ({
@@ -18,11 +19,12 @@ const PostFooter = ({
   onVoteSuccess,
   showAI = true,
   commentsLabel = "الأجوبة",
-    isOwner = false,
+  onCommentsClick,
+  isOwner = false,
 }: PostFooterProps) => {
-    const { loading, handleVote } = useVote(postId);
+  const { loading, handleVote } = useVote(postId);
 
-    async function handleClick(custom: "upvote" | "downvote" | "ai") {
+  async function handleClick(custom: "upvote" | "downvote" | "ai") {
     if (loading && isOwner) return;
     const updatedVotes = await handleVote(custom);
     if (updatedVotes) {
@@ -32,20 +34,22 @@ const PostFooter = ({
 
   return (
     <div className="flex items-center justify-center font-medium gap-5 text-[10px] text-[#6F7C8D]">
-      <button 
-      type="button"
-      onClick={() => handleClick("upvote")}
-      disabled={loading || isOwner}
-      className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+      <button
+        type="button"
+        onClick={() => handleClick("upvote")}
+        disabled={loading || isOwner}
+        className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         <MoveUp size={13} className="text-[#4B1E8A]" />
         دعم ({upvotes})
       </button>
 
       <button
-      type="button"
+        type="button"
         onClick={() => handleClick("downvote")}
-        disabled={loading ||isOwner}
-      className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+        disabled={loading || isOwner}
+        className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         <MoveDown size={13} className="text-[#4B1E8A]" />
         رفض({downvotes})
       </button>
@@ -62,10 +66,14 @@ const PostFooter = ({
         </button>
       )}
 
-      <div className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+      <button
+        type="button"
+        onClick={onCommentsClick}
+        className="flex items-center gap-1 hover:text-[#6620F3] transition-colors"
+      >
         <MessageCircle size={13} className="text-[#4B1E8A]" />
         {commentsLabel}
-      </div>
+      </button>
     </div>
   );
 };

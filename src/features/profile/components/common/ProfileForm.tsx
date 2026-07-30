@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Profile, UpdateProfilePayload } from "../../types/user/Profile";
+import { useAuthStore } from "../../../auth/store/useAuthStore";
 
 import { PurpleInput } from "../ui/PurpleInput";
 import { SkillItemComponent } from "../ui/SkillItemComponent";
@@ -44,6 +45,9 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
   const navigate = useNavigate();
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
+  // آيدي المستخدم الحالي، عشان نرجع لبروفايله الصح بعد الحفظ (الراوت صار /profile/:id مو /profile)
+  const currentUserId = useAuthStore((state) => state.user?.id);
+
   const [userName, setUserName] = useState(profile.user?.user_name ?? "");
   const [bio, setBio] = useState(profile.bio ?? "");
   const [domain, setDomain] = useState(profile.domain ?? "");
@@ -69,7 +73,10 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
     }
   };
 
-    const onSubmit = async (e: React.FormEvent) => {
+  // مسار بروفايلي الحالي (بعد التعديل أو عند الإلغاء)
+  const ownProfilePath = currentUserId ? `/profile/${currentUserId}` : "/profile";
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await handleUpdate({
       user_name: userName || undefined,
@@ -82,7 +89,7 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
     });
 
     if (res.status === "success") {
-      navigate("/profile");
+      navigate(ownProfilePath);
     }
   };
 
@@ -94,7 +101,7 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
           {/* Header */}
           <div className="p-6 border-b border-purple-100 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <button type="button" onClick={() => navigate("/profile")} className="w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#6C5CE7] flex items-center justify-center transition-colors">
+              <button type="button" onClick={() => navigate(ownProfilePath)} className="w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#6C5CE7] flex items-center justify-center transition-colors">
                 <ArrowRight size={20} />
               </button>
               <div>
@@ -102,7 +109,7 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
               </div>
             </div>
                         <div className="flex items-center gap-3">
-              <button type="button" onClick={() => navigate("/profile")} className="px-7 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 text-sm font-bold transition-colors">إلغاء</button>
+              <button type="button" onClick={() => navigate(ownProfilePath)} className="px-7 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 text-sm font-bold transition-colors">إلغاء</button>
               <button type="submit" form="profile-form" disabled={loading} className="px-8 py-3 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] disabled:opacity-70 text-white text-sm font-bold shadow-md shadow-purple-200 transition-all">
                 <span>{loading ? "جاري الحفظ..." : "حفظ التغييرات"}</span>
               </button>

@@ -37,7 +37,7 @@ const NAV_LINKS = [
   { to: "/dashbord/posts/work", label: "فرص العمل", icon: Briefcase },
   { to: "/dashbord/posts/team", label: "كون فريق", icon: Users },
   { to: "/dashbord/posts/project", label: "المشاريع", icon: FolderKanban },
-  { to: "/dashbord/posts/users", label: "قائمة المستخدمين", icon: User2 },
+  { to: "/dashbord/users", label: "قائمة المستخدمين", icon: User2 },
 ];
 
 export function SideBar({ onNavigate }: SideBarProps) {
