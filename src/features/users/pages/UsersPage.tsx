@@ -10,7 +10,6 @@ import { useUserSearchStore } from "../store/useUserSearchStore";
 import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
 import NO_RESULTS_IMAGE from "../../../assets/images/noresultfound.png";
 
-
 const UsersPage = () => {
   const [role, setRole] = useState<UserType | "all">("all");
   const [page, setPage] = useState(1);
@@ -29,10 +28,10 @@ const UsersPage = () => {
     setPage(1);
   }
 
-
-
   if (error) {
-    return <p className="text-centeUsersPage.tsxr text-red-500 py-10">{error}</p>;
+    return (
+      <p className="text-centeUsersPage.tsxr text-red-500 py-10">{error}</p>
+    );
   }
 
   return (
@@ -41,7 +40,10 @@ const UsersPage = () => {
       <UserTypeFilter value={role} onChange={handleRoleChange} />
 
       {!loading && users.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full py-20">
+        <div
+          className="flex flex-col items-center justify-center h-full py-20"
+          style={{ fontFamily: "'Tajawal', sans-serif" }}
+        >
           <img
             src={NO_RESULTS_IMAGE}
             alt="لا توجد نتائج"
@@ -52,14 +54,15 @@ const UsersPage = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+          style={{ fontFamily: "'Tajawal', sans-serif" }}
+        >
           {loading
             ? Array.from({ length: 8 }).map((_, i) => (
                 <UserCardSkeleton key={i} />
               ))
-            : users.map((user) => (
-               <UserCard key={user.id} user={user} />
-              ))}
+            : users.map((user) => <UserCard key={user.id} user={user} />)}
         </div>
       )}
 

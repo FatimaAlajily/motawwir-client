@@ -38,7 +38,7 @@ const UserCard = ({ user }: UserCardProps) => {
             alt={user.user_name}
             className="w-14 h-14 rounded-full object-cover ring-2 ring-[#9723bb]"
           />
-          <span 
+          <span
             className="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full shadow-sm"
             style={{ backgroundColor: dotColor }}
           />
@@ -57,15 +57,18 @@ const UserCard = ({ user }: UserCardProps) => {
       {/* القسم السفلي: السمعة وزر البروفيل كـ Link */}
       <div className="flex items-center justify-between pt-2">
         <span className="text-xs text-[#6B737C]">
-          السمعة: <strong className="text-sm text-[#6620F3] font-bold">{user.votes ?? 0}</strong>
+          السمعة:{" "}
+          <strong className="text-sm text-[#6620F3] font-bold">
+            {user.votes ?? 0}
+          </strong>
         </span>
-        
+
         <Link
-  to={`/profile/${user.id}`} // تم إزالة dashbord/ ليصبح هكذا
-  className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-full text-xs font-medium transition-colors shadow-sm shadow-violet-100 inline-block text-center"
->
-  ملفه الشخصي
-</Link>
+          to={`/profile/${user.id}`} // تم إزالة dashbord/ ليصبح هكذا
+          className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-full text-xs font-medium transition-colors shadow-sm shadow-violet-100 inline-block text-center"
+        >
+          الحساب الشخصي
+        </Link>
       </div>
     </div>
   );

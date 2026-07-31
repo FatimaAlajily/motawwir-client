@@ -6,6 +6,7 @@ import useDeleteMessage from "../hooks/useDeleteMessage";
 import ChatHeader from "../components/ChatHeader";
 import ChatMessageItem from "../components/ChatMessageItem";
 import ChatInput from "../components/ChatInput";
+import ChatSkeleton from "../components/ChatSkeleton";
 
 const ChatPage = () => {
   const { messages, setMessages, loading, error } = useChatMessages();
@@ -45,16 +46,15 @@ const ChatPage = () => {
   }
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full text-gray-400">
-        جاري تحميل الرسائل...
-      </div>
-    );
+    return <ChatSkeleton />;
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full text-red-500">
+      <div
+        className="flex items-center justify-center h-full text-red-500"
+        style={{ fontFamily: "'Tajawal', sans-serif" }}
+      >
         {error}
       </div>
     );
