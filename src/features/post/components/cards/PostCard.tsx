@@ -25,15 +25,19 @@ const COL_SPAN_MAP: Record<PostType, string> = {
 const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
   const currentUser = useAuthStore((state) => state.user);
   const isOwner = currentUser?.id === post.user.id;
+  const isAdmin = currentUser?.role === "admin";
+
   const spanClass = COL_SPAN_MAP[post.type] || "col-span-6";
 
-  const menuAction = isOwner ? (
-    <PostOptionsMenu
-      postId={post.id}
-      onDeleted={onDeleted}
-      onEdit={() => onEdit(post)}
-    />
-  ) : null;
+  const menuAction =
+    isOwner || isAdmin ? (
+      <PostOptionsMenu
+        postId={post.id}
+        onDeleted={onDeleted}
+        onEdit={isOwner ? () => onEdit(post) : undefined}
+        asAdmin={!isOwner && isAdmin}
+      />
+    ) : null;
 
   function renderCard() {
     switch (post.type) {
@@ -42,7 +46,7 @@ const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
           <QuestionPostCard
             post={post}
             deleteAction={menuAction}
-            isOwner={isOwner} // ✅
+            isOwner={isOwner}
           />
         );
       case "work":
@@ -50,7 +54,7 @@ const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
           <WorkPostCard
             post={post}
             deleteAction={menuAction}
-            isOwner={isOwner} // ✅
+            isOwner={isOwner}
           />
         );
       case "new":
@@ -58,7 +62,7 @@ const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
           <NewPostCard
             post={post}
             deleteAction={menuAction}
-            isOwner={isOwner} // ✅
+            isOwner={isOwner}
           />
         );
       case "project":
@@ -66,7 +70,7 @@ const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
           <ProjectPostCard
             post={post}
             deleteAction={menuAction}
-            isOwner={isOwner} // ✅
+            isOwner={isOwner}
           />
         );
       case "team":
@@ -74,7 +78,7 @@ const PostCard = ({ post, onDeleted, onEdit }: PostCardProps) => {
           <TeamPostCard
             post={post}
             deleteAction={menuAction}
-            isOwner={isOwner} // ✅
+            isOwner={isOwner}
           />
         );
       default:

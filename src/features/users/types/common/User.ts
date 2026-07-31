@@ -4,7 +4,7 @@ export type User = {
   id: number;
   user_name: string;
   avatar: string;
-  role: UserType | "admin";
+  role: UserType;
   votes?: number;
   email?: string;
   is_banned?: boolean;
