@@ -3,7 +3,12 @@ import { storeVoteRequest } from "../api/VoteApi";
 import type { VoteDetails } from "../../../shared/types/VoteDetails";
 import type { VoteCustom } from "../types/VoteCustom";
 
-const useVote = (postId: number) => {
+type VoteTarget = {
+  type: "post" | "comment";
+  id: number;
+};
+
+const useVote = ({ type, id }: VoteTarget) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -11,11 +16,13 @@ const useVote = (postId: number) => {
     setLoading(true);
     setError("");
 
-    const response = await storeVoteRequest({
-      type: "post",
-      custom,
-      post_id: postId,
-    });
+const response = await storeVoteRequest({
+  type,
+  custom,
+  ...(type === "post"
+    ? { post_id: id }
+    : { comment_id: id }),
+});
 
     setLoading(false);
 

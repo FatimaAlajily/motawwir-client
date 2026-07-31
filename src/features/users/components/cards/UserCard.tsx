@@ -57,7 +57,7 @@ const UserCard = ({ user }: UserCardProps) => {
       {/* القسم السفلي: السمعة وزر البروفيل كـ Link */}
       <div className="flex items-center justify-between pt-2">
         <span className="text-xs text-[#6B737C]">
-          السمعة: <strong className="text-sm text-[#6620F3] font-bold">{user.votes ?? 0}</strong>
+          السمعة: <strong className="text-sm text-[#6620F3] font-bold">{user.votra ?? 0}</strong>
         </span>
         
         <Link

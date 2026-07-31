@@ -22,8 +22,10 @@ const PostFooter = ({
   onCommentsClick,
   isOwner = false,
 }: PostFooterProps) => {
-  const { loading, handleVote } = useVote(postId);
-
+  const { loading, handleVote } = useVote({
+  type: "post",
+  id: postId,
+});
   async function handleClick(custom: "upvote" | "downvote" | "ai") {
     if (loading && isOwner) return;
     const updatedVotes = await handleVote(custom);

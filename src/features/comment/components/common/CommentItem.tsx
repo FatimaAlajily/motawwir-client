@@ -5,6 +5,7 @@ import { Input } from "../ui/Input";
 import { Bubble as CommentBubble } from "../ui/BubbleProps";
 import { OptionsMenu } from "../ui/OptionsMenu";
 import { Bot, MoveDown, MoveUp } from "lucide-react";
+import useVote from "../../../votes/hooks/useVote";
 
 type Props = {
   comment: Comment;
@@ -35,7 +36,23 @@ export function CommentItem({
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [votes, setVotes] = useState(comment.votes);
+  const { loading, handleVote } = useVote({
+  type: "comment",
+  id: comment.id,
+});
 
+async function handleClick(
+  custom: "upvote" | "downvote" | "ai"
+) {
+  if (loading || isOwner) return;
+
+  const updatedVotes = await handleVote(custom);
+
+  if (updatedVotes) {
+    setVotes(updatedVotes);
+  }
+}
   async function handleEdit(text: string) {
     const res = (await onEdit(comment.id, text)) as {
       status?: string;
@@ -48,11 +65,13 @@ export function CommentItem({
     return res;
   }
 
+
   async function handleDelete() {
     setIsDeleting(true);
     await onDelete(comment.id);
     setIsDeleting(false);
   }
+
 
   return (
     <div className="flex items-start gap-3 py-4">
@@ -89,22 +108,40 @@ export function CommentItem({
                 {comment.text}
               </p>
 
-              {/* تصميم أزرار التصويت والتفاعل فقط */}
               <div className="flex items-center justify-start font-medium gap-4 text-[10px] text-[#6F7C8D] mt-3 pt-2 border-t border-gray-100">
-                <button className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+
+                <button
+                  type="button"
+                  onClick={() => handleClick("upvote")}
+                  disabled={loading || isOwner}
+                  className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
+                >
                   <MoveUp size={13} className="text-[#4B1E8A]" />
-                  دعم (0)
+                 دعم ({votes?.upvotes ?? 0})
                 </button>
 
-                <button className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+
+                <button
+                  type="button"
+                  onClick={() => handleClick("downvote")}
+                  disabled={loading || isOwner}
+                  className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
+                >
                   <MoveDown size={13} className="text-[#4B1E8A]" />
-                  رفض (0)
+                رفض ({votes?.downvotes ?? 0})
                 </button>
 
-                <div className="flex items-center gap-1 hover:text-[#6620F3] transition-colors">
+
+                <button
+                  type="button"
+                  onClick={() => handleClick("ai")}
+                  disabled={loading || isOwner}
+                  className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
+                >
                   <Bot size={13} className="text-[#4B1E8A]" />
-                  ذكاء اصطناعي (0)
-                </div>
+                ذكاء اصطناعي ({votes?.ai ?? 0})
+                </button>
+
               </div>
             </>
           )}
