@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Menu, Search, X } from "lucide-react";
 import SearchBar from "./SearchBar";
 import CreateButton from "./CreateButton";
-import NotificationBar from "./NotificationBar";
 import AvatarBar from "./AvatarBar";
 import motawwerLogo from "../../../assets/images/Logo.png";
+import NotificationBar from "../../../features/notification/components/NotificationBar";
 
 type NavBarProps = {
   onMenuClick: () => void;
