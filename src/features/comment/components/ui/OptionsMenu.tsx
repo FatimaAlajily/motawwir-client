@@ -6,12 +6,14 @@ type Props = {
   onEdit: () => void;
   onDelete: () => void;
   loading?: boolean;
+  asAdmin?: boolean;
 };
 
 export function OptionsMenu({
   onEdit,
   onDelete,
   loading = false,
+  asAdmin = false,
 }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -88,15 +90,17 @@ export function OptionsMenu({
               top: `${coords.top}px`,
               left: `${coords.left}px`,
             }}
-            className="fixed w-32 bg-white border border-gray-100 rounded-xl shadow-2xl z-[9999] overflow-hidden"
+            className="fixed w-32 bg-white border border-gray-100 rounded-xl shadow-2xl z-9999 overflow-hidden"
           >
-            <button
-              onClick={handleEdit}
-              className="flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
-            >
-              <Pencil size={13} />
-              تعديل
-            </button>
+            {!asAdmin && (
+              <button
+                onClick={handleEdit}
+                className="flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                <Pencil size={13} />
+                تعديل
+              </button>
+            )}
 
             <button
               onClick={handleDelete}
@@ -115,7 +119,7 @@ export function OptionsMenu({
         size="sm"
       >
         <ModalHeader className="font-bold text-violet-600">
-          حذف التعليق
+          {asAdmin ? "حذف التعليق (صلاحية المدير)" : "حذف التعليق"}
         </ModalHeader>
 
         <ModalBody>

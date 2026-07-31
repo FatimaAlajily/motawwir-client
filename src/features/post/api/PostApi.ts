@@ -118,6 +118,19 @@ export async function deletePostRequest(
   }
 }
 
+export async function forceDeletePostRequest(
+  id: number
+): Promise<ApiResponse<{ id: number }>> {
+  try {
+    const response = await axiosClient.delete<ApiSuccess<{ id: number }>>(
+      `admin/moderation/posts/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    return HandleApiError(error);
+  }
+}
+
 export async function toggleSavePostRequest(
   id: number
 ): Promise<ApiResponse<{ saved: boolean }>> {

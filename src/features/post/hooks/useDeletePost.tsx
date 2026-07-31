@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { deletePostRequest } from "../api/PostApi";
-import { forceDeletePostRequest } from "../../auth/api/AuthApi";
+import { deletePostRequest, forceDeletePostRequest } from "../api/PostApi";
 
 const useDeletePost = () => {
   const [loading, setLoading] = useState(false);

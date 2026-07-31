@@ -4,6 +4,7 @@ import {
   createCommentRequest,
   updateCommentRequest,
   deleteCommentRequest,
+  forceDeleteCommentRequest,
 } from "../api/Commentapi";
 import type {
   Comment,
@@ -72,7 +73,10 @@ const useComments = (target: CommentTarget) => {
     const response = await createCommentRequest({ ...target, text });
 
     if (response.status === "success") {
-      setComments((prev) => [response.data, ...(Array.isArray(prev) ? prev : [])]);
+      setComments((prev) => [
+        response.data,
+        ...(Array.isArray(prev) ? prev : []),
+      ]);
     } else {
       setError(response.message);
     }
@@ -94,9 +98,12 @@ const useComments = (target: CommentTarget) => {
     return response;
   }
 
-  async function removeComment(id: number) {
+  async function removeComment(id: number, asAdmin: boolean = false) {
     setError("");
-    const response = await deleteCommentRequest(id);
+
+    const response = asAdmin
+      ? await forceDeleteCommentRequest(id)
+      : await deleteCommentRequest(id);
 
     if (response.status === "success") {
       setComments((prev) => prev.filter((c) => c.id !== id));

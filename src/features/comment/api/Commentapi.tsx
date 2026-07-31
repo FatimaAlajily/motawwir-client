@@ -8,9 +8,9 @@ import type {
   UpdateCommentPayload,
   PaginatedComments,
 } from "../types/comment/Comment";
- 
+
 type GetCommentsParams = CommentTarget & { page?: number };
- 
+
 export async function getCommentsRequest(
   params: GetCommentsParams
 ): Promise<ApiResponse<PaginatedComments>> {
@@ -24,7 +24,7 @@ export async function getCommentsRequest(
     return HandleApiError(error);
   }
 }
- 
+
 export async function createCommentRequest(
   payload: CreateCommentPayload
 ): Promise<ApiResponse<Comment>> {
@@ -38,7 +38,7 @@ export async function createCommentRequest(
     return HandleApiError(error);
   }
 }
- 
+
 export async function updateCommentRequest(
   id: number,
   payload: UpdateCommentPayload
@@ -53,13 +53,26 @@ export async function updateCommentRequest(
     return HandleApiError(error);
   }
 }
- 
+
 export async function deleteCommentRequest(
   id: number
 ): Promise<ApiResponse<null>> {
   try {
     const response = await axiosClient.delete<ApiResponse<null>>(
       `comments/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    return HandleApiError(error);
+  }
+}
+
+export async function forceDeleteCommentRequest(
+  id: number
+): Promise<ApiResponse<{ id: number }>> {
+  try {
+    const response = await axiosClient.delete<ApiResponse<{ id: number }>>(
+      `admin/moderation/comments/${id}`
     );
     return response.data;
   } catch (error) {

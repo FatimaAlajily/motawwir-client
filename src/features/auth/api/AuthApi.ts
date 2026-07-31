@@ -15,19 +15,6 @@ export async function userRequest(): Promise<ApiResponse<User>> {
   }
 }
 
-export async function forceDeletePostRequest(
-  id: number
-): Promise<ApiResponse<{ id: number }>> {
-  try {
-    const response = await axiosClient.delete<ApiSuccess<{ id: number }>>(
-      `admin/moderation/posts/${id}`
-    );
-    return response.data;
-  } catch (error) {
-    return HandleApiError(error);
-  }
-}
-
 export async function loginRequest(payload: Login): Promise<ApiResponse<User>> {
   try {
     const response = await axiosClient.post<ApiSuccess<User>>(
