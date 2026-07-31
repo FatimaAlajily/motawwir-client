@@ -10,7 +10,6 @@ function extractErrorMessage(error: unknown, fallback: string): string {
   return fallback;
 }
 
-// دالة مساعدة لجلب الـ Socket ID وإضافته للهيدر
 function getSocketIdHeader() {
   const socketId = window.Echo?.socketId();
   return socketId ? { "X-Socket-ID": socketId } : {};
@@ -39,7 +38,6 @@ export async function sendMessageRequest(
   message: string
 ): Promise<ApiResponse<Message>> {
   try {
-    // ✅ إضافة الـ X-Socket-ID للهيدر
     const response = await axiosClient.post(
       "chat/messages",
       { message },
@@ -58,10 +56,26 @@ export async function deleteMessageRequest(
   id: number
 ): Promise<ApiResponse<{ id: number }>> {
   try {
-    // ✅ إضافة الـ X-Socket-ID للهيدر
     const response = await axiosClient.delete(`chat/messages/${id}`, {
       headers: getSocketIdHeader(),
     });
+    return response.data;
+  } catch (error) {
+    return {
+      status: "error",
+      message: extractErrorMessage(error, "Failed to delete message"),
+    };
+  }
+}
+
+export async function forceDeleteMessageRequest(
+  id: number
+): Promise<ApiResponse<{ id: number }>> {
+  try {
+    const response = await axiosClient.delete(
+      `admin/moderation/messages/${id}`,
+      { headers: getSocketIdHeader() }
+    );
     return response.data;
   } catch (error) {
     return {

@@ -5,7 +5,6 @@ type UserCardProps = {
   user: User;
 };
 
-// ترجمة الأدوار إلى العربية مع إمكانية عرضها حسب الرغبة
 const ROLE_LABELS: Record<string, string> = {
   developer: "مطور",
   company: "شركة",
@@ -13,7 +12,6 @@ const ROLE_LABELS: Record<string, string> = {
   admin: "مسؤول",
 };
 
-// خريطة ألوان الدائرة حسب نوع الدور
 const ROLE_COLORS: Record<string, string> = {
   developer: "#502290",
   company: "#38FFFF",
@@ -30,7 +28,6 @@ const UserCard = ({ user }: UserCardProps) => {
       className="bg-[#F4F3F9] border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow w-full flex flex-col justify-between"
       style={{ fontFamily: "'Tajawal', sans-serif" }}
     >
-      {/* القسم العلوي: الصورة والمعلومات */}
       <div className="flex items-center gap-3.5 mb-4">
         <div className="relative shrink-0">
           <img
@@ -38,7 +35,7 @@ const UserCard = ({ user }: UserCardProps) => {
             alt={user.user_name}
             className="w-14 h-14 rounded-full object-cover ring-2 ring-[#9723bb]"
           />
-          <span 
+          <span
             className="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full shadow-sm"
             style={{ backgroundColor: dotColor }}
           />
@@ -54,18 +51,20 @@ const UserCard = ({ user }: UserCardProps) => {
         </div>
       </div>
 
-      {/* القسم السفلي: السمعة وزر البروفيل كـ Link */}
       <div className="flex items-center justify-between pt-2">
         <span className="text-xs text-[#6B737C]">
-          السمعة: <strong className="text-sm text-[#6620F3] font-bold">{user.votra ?? 0}</strong>
+          السمعة:{" "}
+          <strong className="text-sm text-[#6620F3] font-bold">
+            {user.votra ?? 0}
+          </strong>
         </span>
-        
+
         <Link
-  to={`/profile/${user.id}`} // تم إزالة dashbord/ ليصبح هكذا
-  className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-full text-xs font-medium transition-colors shadow-sm shadow-violet-100 inline-block text-center"
->
-  ملفه الشخصي
-</Link>
+          to={`/profile/${user.id}`}
+          className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-full text-xs font-medium transition-colors shadow-sm shadow-violet-100 inline-block text-center"
+        >
+          الحساب الشخصي
+        </Link>
       </div>
     </div>
   );

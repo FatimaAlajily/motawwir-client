@@ -6,20 +6,22 @@ import useDeletePost from "../../hooks/useDeletePost";
 type PostOptionsMenuProps = {
   postId: number;
   onDeleted: () => void;
-  onEdit?: () => void; // اختياري حاليًا لحين بناء ميزة التعديل
+  onEdit?: () => void;
+  asAdmin?: boolean;
 };
 
 const PostOptionsMenu = ({
   postId,
   onDeleted,
   onEdit,
+  asAdmin = false,
 }: PostOptionsMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { loading, error, handleDeletePost } = useDeletePost();
 
   async function handleConfirmDelete() {
-    const success = await handleDeletePost(postId);
+    const success = await handleDeletePost(postId, asAdmin);
     if (success) {
       setIsDeleteModalOpen(false);
       onDeleted();
@@ -94,7 +96,7 @@ const PostOptionsMenu = ({
         style={{ fontFamily: "'Tajawal', sans-serif" }}
       >
         <ModalHeader className="font-bold text-violet-600">
-          حذف المنشور
+          {asAdmin ? "حذف المنشور (صلاحية إدارية)" : "حذف المنشور"}
         </ModalHeader>
 
         <ModalBody>
@@ -104,7 +106,7 @@ const PostOptionsMenu = ({
             </div>
 
             <p className="text-sm text-gray-700">
-              هل أنت متأكد أنك تريد حذف هذا المنشور؟
+              هل أنت متأكد من أنك تريد حذف هذا المنشور؟
             </p>
             <p className="text-xs text-gray-400">
               لا يمكن التراجع عن هذا الإجراء بعد تنفيذه
@@ -134,15 +136,12 @@ const PostOptionsMenu = ({
           >
             {loading ? (
               <div className="flex items-center gap-2">
-                {/* ✅ الـ Spinner بنفس فكرته لكن بلون أبيض ليتناسب مع الزر */}
                 <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
                 <span>جاري الحذف</span>
               </div>
             ) : (
-              "حذف نهائيًا"
+              "حذف نهائيا"
             )}
-
-            {/* // {loading ? "جاري الحذف..." : "حذف نهائيًا"} */}
           </button>
         </ModalFooter>
       </Modal>

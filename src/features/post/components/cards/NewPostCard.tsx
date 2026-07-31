@@ -3,6 +3,8 @@ import { Bookmark } from "lucide-react";
 import type { NewPost } from "../../types/kinds/NewPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import CommentSection from "../../../comment/components/common/CommentSection";
+import { usePostComments } from "../../hooks/usePostComments";
 
 type NewPostCardProps = {
   post: NewPost;
@@ -17,10 +19,10 @@ function isVideoFile(url: string): boolean {
   return VIDEO_EXTENSIONS.includes(extension);
 }
 
-const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
+const NewPostCard = ({ post, deleteAction, isOwner }: NewPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [votes, setVotes] = useState(post.votes);
-
+  const comments = usePostComments(post.id);
 
   const hasFile = Boolean(post.file);
   const isVideo = post.file ? isVideoFile(post.file) : false;
@@ -104,14 +106,24 @@ const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-      postId={post.id}
+        postId={post.id}
         upvotes={votes.upvotes}
         downvotes={votes.downvotes}
         ai={votes.ai}
         commentsLabel="الأجوبة"
         onVoteSuccess={setVotes}
         isOwner={isOwner}
+        onCommentsClick={comments.toggle}
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

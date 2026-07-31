@@ -5,13 +5,14 @@ import { Input } from "../ui/Input";
 import { Bubble as CommentBubble } from "../ui/BubbleProps";
 import { OptionsMenu } from "../ui/OptionsMenu";
 import { Bot, MoveDown, MoveUp } from "lucide-react";
+import { useAuthStore } from "../../../auth/store/useAuthStore";
 import useVote from "../../../votes/hooks/useVote";
 
 type Props = {
   comment: Comment;
   isOwner: boolean;
   onEdit: (id: number, text: string) => Promise<unknown>;
-  onDelete: (id: number) => Promise<unknown>;
+  onDelete: (id: number, asAdmin?: boolean) => Promise<unknown>;
 };
 
 function timeAgo(dateString: string) {
@@ -28,31 +29,28 @@ function timeAgo(dateString: string) {
   return `منذ ${days} يوم`;
 }
 
-export function CommentItem({
-  comment,
-  isOwner,
-  onEdit,
-  onDelete,
-}: Props) {
+export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [votes, setVotes] = useState(comment.votes);
   const { loading, handleVote } = useVote({
-  type: "comment",
-  id: comment.id,
-});
+    type: "comment",
+    id: comment.id,
+  });
 
-async function handleClick(
-  custom: "upvote" | "downvote" | "ai"
-) {
-  if (loading || isOwner) return;
+  const currentUser = useAuthStore((state) => state.user);
+  const isAdmin = currentUser?.role === "admin";
+  const canManage = isOwner || isAdmin;
 
-  const updatedVotes = await handleVote(custom);
+  async function handleClick(custom: "upvote" | "downvote" | "ai") {
+    if (loading || isOwner) return;
 
-  if (updatedVotes) {
-    setVotes(updatedVotes);
+    const updatedVotes = await handleVote(custom);
+
+    if (updatedVotes) {
+      setVotes(updatedVotes);
+    }
   }
-}
   async function handleEdit(text: string) {
     const res = (await onEdit(comment.id, text)) as {
       status?: string;
@@ -65,31 +63,27 @@ async function handleClick(
     return res;
   }
 
-
   async function handleDelete() {
     setIsDeleting(true);
-    await onDelete(comment.id);
+    await onDelete(comment.id, !isOwner && isAdmin);
     setIsDeleting(false);
   }
 
-
   return (
     <div className="flex items-start gap-3 py-4">
-      <CommentAvatar
-        src={comment.user.avatar}
-        alt={comment.user.user_name}
-      />
+      <CommentAvatar src={comment.user.avatar} alt={comment.user.user_name} />
 
       <div className="flex-1 min-w-0">
         <CommentBubble
           userName={comment.user.user_name}
           createdAt={timeAgo(comment.created_at)}
           actions={
-            isOwner && !isEditing ? (
+            canManage && !isEditing ? (
               <OptionsMenu
                 onEdit={() => setIsEditing(true)}
                 onDelete={handleDelete}
                 loading={isDeleting}
+                asAdmin={!isOwner && isAdmin}
               />
             ) : undefined
           }
@@ -104,12 +98,11 @@ async function handleClick(
             </div>
           ) : (
             <>
-              <p className="mt-1 whitespace-pre-line break-words text-sm text-gray-700">
+              <p className="mt-1 whitespace-pre-line wrap-break-word text-sm text-gray-700">
                 {comment.text}
               </p>
 
               <div className="flex items-center justify-start font-medium gap-4 text-[10px] text-[#6F7C8D] mt-3 pt-2 border-t border-gray-100">
-
                 <button
                   type="button"
                   onClick={() => handleClick("upvote")}
@@ -117,9 +110,8 @@ async function handleClick(
                   className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
                 >
                   <MoveUp size={13} className="text-[#4B1E8A]" />
-                 دعم ({votes?.upvotes ?? 0})
+                  دعم ({votes?.upvotes ?? 0})
                 </button>
-
 
                 <button
                   type="button"
@@ -128,9 +120,8 @@ async function handleClick(
                   className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
                 >
                   <MoveDown size={13} className="text-[#4B1E8A]" />
-                رفض ({votes?.downvotes ?? 0})
+                  رفض ({votes?.downvotes ?? 0})
                 </button>
-
 
                 <button
                   type="button"
@@ -139,9 +130,8 @@ async function handleClick(
                   className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
                 >
                   <Bot size={13} className="text-[#4B1E8A]" />
-                ذكاء اصطناعي ({votes?.ai ?? 0})
+                  ذكاء اصطناعي ({votes?.ai ?? 0})
                 </button>
-
               </div>
             </>
           )}

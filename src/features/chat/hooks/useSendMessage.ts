@@ -17,7 +17,7 @@ const useSendMessage = () => {
     setLoading(false);
 
     if (response.status === "success" && response.data) {
-      return response.data; // ✅ إرجاع الرسالة التي أنشأها الخادم
+      return response.data;
     }
 
     setError(response.message);

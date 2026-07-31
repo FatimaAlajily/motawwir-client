@@ -8,7 +8,7 @@ const UserSearchInput = () => {
   return (
     <div
       dir="rtl"
-      className="flex items-center gap-2 bg-[#F9F9F6] border border-[#E5E3D8] rounded-md px-3 py-1.5 mb-4 w-[400px] mr-auto ml-0"
+      className="flex items-center gap-2 bg-[#F9F9F6] border border-[#E5E3D8] rounded-md px-3 py-1.5 mb-4 w-100 mr-auto ml-0"
       style={{ fontFamily: "'Tajawal', sans-serif" }}
     >
       <Search size={15} className="text-gray-400 shrink-0" />
