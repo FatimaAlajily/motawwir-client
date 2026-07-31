@@ -1,3 +1,4 @@
+import type { VoteDetails } from "../../../../shared/types/VoteDetails";
 export type CommentType = "post" | "profile";
 
 export type CommentTarget =
@@ -22,7 +23,7 @@ export type Comment = {
   type: CommentType;
   created_at: string;
   user: CommentUser;
-  votes: CommentVotes;
+  votes: VoteDetails;
 };
 
 export type CreateCommentPayload = CommentTarget & {

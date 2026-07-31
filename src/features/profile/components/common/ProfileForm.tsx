@@ -76,16 +76,27 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
   // مسار بروفايلي الحالي (بعد التعديل أو عند الإلغاء)
   const ownProfilePath = currentUserId ? `/profile/${currentUserId}` : "/profile";
 
-  const onSubmit = async (e: React.FormEvent) => {
+ const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // معالجة رابط الدومين لضمان عدم إرسال رابط ناقص أو فارغ يتسبب في خطأ الـ Validation
+    let formattedDomain: string | undefined = undefined;
+    if (domain && domain.trim() !== "") {
+      formattedDomain = domain.startsWith("http") ? domain : `https://${domain}`;
+    }
+
     const res = await handleUpdate({
       user_name: userName || undefined,
-      bio, phone, location, skill: skills,
+      bio, 
+      phone, 
+      location, 
+      skill: skills,
       github: github ? `https://github.com/${github}` : undefined,
       gmail,
-      domain: domain.startsWith("http") ? domain : `https://${domain}`,
+      domain: formattedDomain,
       linkedin: linkedin ? `https://linkedin.com/in/${linkedin}` : undefined,
-      avatar, cv,
+      avatar, 
+      cv,
     });
 
     if (res.status === "success") {

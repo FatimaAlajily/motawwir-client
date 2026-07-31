@@ -4,23 +4,21 @@ import { AvatarComponent } from "../ui/Avatar";
 import { RoleBadge } from "../ui/RoleBadge"; // ← استدعاء الشارة
 import type { Profile } from "../../types/user/Profile";
 
-type ProfileUI = Profile & { votraScore?: string; };
-
-export default function ProfileHeader({ profile, isOwner }: { profile: ProfileUI; isOwner: boolean }) {
+export default function ProfileHeader({ profile, isOwner }: { profile: Profile; isOwner: boolean }) {
   return (
     <div className="p-6 md:p-8 flex flex-col md:flex-row items-start justify-between gap-6">
       <div className="flex flex-col md:flex-row items-center md:items-start gap-6 w-full">
         
         <div className="flex flex-col items-center shrink-0">
           <AvatarComponent src={profile.user?.avatar || "/default-avatar.png"} alt={profile.user?.user_name || ""} size="lg" />
-          {profile.votraScore != null && (
-        <div className="mt-2 text-xs font-medium flex items-center gap-1.5" style={{ color: "#6B737C" }}>
-          <span className="text-sm">Votra</span>
-          <span className="font-bold text-xl" style={{ color: "#000000" }}>
-         {profile.votraScore}
-          </span>
-       </div>
-       )}
+          
+          {/* عرض السمعة الحقيقية القادمة من بيانات المستخدم */}
+          <div className="mt-2 text-xs font-medium flex items-center gap-1.5" style={{ color: "#6B737C" }}>
+            <span className="text-sm">Votra</span>
+            <span className="font-bold text-xl" style={{ color: "#000000" }}>
+              {profile.user?.votra ?? 0}
+            </span>
+          </div>
         </div>
 
         <div className="flex-1 text-center md:text-right min-w-0">
