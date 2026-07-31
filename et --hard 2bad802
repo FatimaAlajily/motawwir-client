@@ -1,0 +1,49 @@
+[33m2bad802[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/notification-ui[m[33m)[m complete notification
+[33mbce7572[m Notify
+[33m7326689[m Merge pull request #6 from FatimaAlajily/feature/user-account-navbar-ui
+[33m5d922c0[m[33m ([m[1;31morigin/feature/user-account-navbar-ui[m[33m, [m[1;32mfeature/user-account-navbar-ui[m[33m)[m Avatar link to Profile page
+[33mb549b66[m Merge pull request #5 from FatimaAlajily/feature/global-chat-ui
+[33m0e1e4fc[m[33m ([m[1;31morigin/feature/global-chat-ui[m[33m, [m[1;32mfeature/global-chat-ui[m[33m)[m Chat App Message Input Ui
+[33m147dc23[m UI Chat
+[33md2cbf42[m Chat Socket Realtime App
+[33mf62f45b[m Merge pull request #4 from FatimaAlajily/feature/vote-ui
+[33md44b5d0[m[33m ([m[1;31morigin/feature/vote-ui[m[33m, [m[1;32mfeature/vote-ui[m[33m)[m Vote With Disabled For My Vote
+[33m000260c[m Merge pull request #3 from FatimaAlajily/feature/vote-ui
+[33m971b8cd[m Start Vote for all cad
+[33m471ee6e[m Fix Login Register Route
+[33m0a8f968[m Merge pull request #2 from FatimaAlajily/feature/comment-rebase-ui
+[33mec2acad[m[33m ([m[1;31morigin/feature/comment-rebase-ui[m[33m, [m[1;32mfeature/comment-rebase-ui[m[33m)[m fix App raoute for login dashbord profile comment
+[33m1a678ee[m Merge pull request #1 from FatimaAlajily/feature/post-ui
+[33m507da25[m[33m ([m[1;31morigin/feature/comment-ui[m[33m)[m Update comment UI styling
+[33m415acbe[m[33m ([m[1;31morigin/feature/post-ui[m[33m, [m[1;32mfeature/post-ui[m[33m)[m Loading Page Dashboard
+[33mf47445b[m Sketch Card Loading posts cards
+[33m238e3c6[m Search Loading and Buttons Loading
+[33ma46969f[m Map Sidebar for Routes
+[33m3928925[m feat: add comment UI and infinite scroll
+[33m16397c7[m Responsive Cards Project Team All Card
+[33m8a93c80[m Responsive Dasboard Header Sidebar Menu
+[33m86d98c2[m Fix Sidebar
+[33m073ddd3[m Search Pagination
+[33m9016c91[m Implement user profile UI
+[33mea5245f[m Fix SideBar
+[33m698b149[m team col-span change
+[33mdb1378e[m ANother version from question
+[33m707769e[m Finishing Component
+[33m181368b[m Update NewPostCard
+[33m1c98491[m New With file succes
+[33m35e68f8[m New Befoer Remove content type
+[33mab5d780[m Card Team expender
+[33m0551053[m Work Question Team components
+[33m227b19c[m Work Post Card Componnet has created
+[33m304d806[m Create Question Component
+[33ma00d2c2[m Creating Modal To each type
+[33mbbd0e7d[m[33m ([m[1;31morigin/feature/dashbord-ui[m[33m, [m[1;32mfeature/dashbord-ui[m[33m)[m Completa API Design SIdebar and Navbar
+[33mf9eb931[m Finish SideBar and NavBar Design
+[33mf5483f8[m add loading page and Register page
+[33me76ef91[m Creating Components For DAshbord Like NavBar SideBar And Search avatar createbutton notification
+[33mbaeede0[m[33m ([m[1;31morigin/feature/user-auth-ui[m[33m, [m[1;32mfeature/user-auth-ui[m[33m)[m Desgin UI Login with Brand Form Components With Responsive design  And Test APi
+[33mdece142[m Auth store hooks button input without  form login
+[33m371ec36[m implement auth interface
+[33mb11d7ba[m Define themes variables tailwind css
+[33m11c8aa6[m Preparing folder structure feature based
+[33m981ea61[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m Main Brnach with all packages and readme file
