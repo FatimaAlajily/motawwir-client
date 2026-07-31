@@ -38,8 +38,8 @@ const ChatPage = () => {
     }
   }
 
-  async function onDelete(id: number) {
-    const success = await handleDelete(id);
+  async function onDelete(id: number, asAdmin: boolean = false) {
+    const success = await handleDelete(id, asAdmin);
     if (success) {
       setMessages((prev) => prev.filter((m) => m.id !== id));
     }
@@ -71,14 +71,21 @@ const ChatPage = () => {
 
       {/* -------------- Message List ------------*/}
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 no-scrollbar">
-        {messages.map((msg) => (
-          <ChatMessageItem
-            key={msg.id}
-            msg={msg}
-            isOwner={currentUser?.id === msg.user.id}
-            onDelete={onDelete}
-          />
-        ))}
+        {messages.map((msg) => {
+          const isOwner = currentUser?.id === msg.user.id;
+          const isAdmin = currentUser?.role === "admin"; // ✅ جديد
+          const canDelete = isOwner || isAdmin; // ✅ جديد
+
+          return (
+            <ChatMessageItem
+              key={msg.id}
+              msg={msg}
+              isOwner={isOwner}
+              canDelete={canDelete}
+              onDelete={() => onDelete(msg.id, !isOwner && isAdmin)} // ✅ asAdmin فقط لو ليس المالك
+            />
+          );
+        })}
         <div ref={bottomRef} />
       </div>
 

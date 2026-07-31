@@ -4,10 +4,16 @@ import type { Message } from "../types/Message";
 type ChatMessageItemProps = {
   msg: Message;
   isOwner: boolean;
+  canDelete?: boolean;
   onDelete: (id: number) => void;
 };
 
-const ChatMessageItem = ({ msg, isOwner, onDelete }: ChatMessageItemProps) => {
+const ChatMessageItem = ({
+  msg,
+  isOwner,
+  canDelete = false,
+  onDelete,
+}: ChatMessageItemProps) => {
   return (
     <div
       className={`flex items-start gap-2 w-fit max-w-[90%] ${
@@ -53,11 +59,13 @@ const ChatMessageItem = ({ msg, isOwner, onDelete }: ChatMessageItemProps) => {
           </p>
 
           {/* ----------- Delete Button ---------------*/}
-          {isOwner && (
+          {canDelete && (
             <button
               type="button"
               onClick={() => onDelete(msg.id)}
-              className="absolute -top-2 -left-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white text-violet-500 rounded-full p-1 shadow-md hover:text-violet-600"
+              className={`absolute -top-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1 shadow-md ${
+                isOwner ? "-left-2" : "-right-2" // ✅ موضع الزر يتكيف حسب الجهة
+              } text-violet-500 hover:text-violet-600`}
               aria-label="حذف الرسالة"
             >
               <Trash2 size={12} />
