@@ -15,7 +15,7 @@ const echo = new Echo({
   forceTLS: false,
   enabledTransports: ["ws", "wss"],
 
-  authorizer: (channel: string) => {
+  authorizer: (channel: { name: string }) => {
     return {
       authorize: (
         socketId: string,
@@ -27,7 +27,7 @@ const echo = new Echo({
             channel_name: channel.name,
           })
           .then((response) => callback(null, response.data))
-          .catch((error) => callback(error, error));
+          .catch((error) => callback(error, null));
       },
     };
   },
