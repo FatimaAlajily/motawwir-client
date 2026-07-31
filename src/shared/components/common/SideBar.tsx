@@ -22,13 +22,12 @@ import {
 import "../../../styles/theme.css";
 import SideBarIcons from "../common/SideBarIcons";
 import rabbitSidebar from "../../../assets/images/rabbit-sidebar.png";
-import { Link, useLocation } from "react-router-dom"; // ✅ استيراد useLocation
+import { Link, useLocation } from "react-router-dom";
 
 type SideBarProps = {
   onNavigate?: () => void;
 };
 
-// ✅ تعريف روابط السايدبار في مصفوفة لتسهيل التكرار
 const NAV_LINKS = [
   { to: "/dashbord", label: "الصفحة الرئيسية", icon: Home },
   { to: "/dashbord/chat", label: "الدردشة العالمية", icon: MessageSquare },
@@ -41,7 +40,7 @@ const NAV_LINKS = [
 ];
 
 export function SideBar({ onNavigate }: SideBarProps) {
-  const { pathname } = useLocation(); // ✅ الحصول على مسار الصفحة الحالية
+  const { pathname } = useLocation();
 
   return (
     <Sidebar
