@@ -7,7 +7,7 @@ import {
 } from "../api/NotificationApi";
 import { useAuthStore } from "../../auth/store/useAuthStore";
 import type { AppNotification } from "../types/AppNotification";
-import echo from "../../chat/lib/echo";
+import { subscribeToNotifications } from "../lib/notificationChannel";
 
 const useNotifications = () => {
   const currentUser = useAuthStore((state) => state.user);
@@ -53,16 +53,10 @@ const useNotifications = () => {
   useEffect(() => {
     if (!currentUser) return;
 
-    const channel = echo.private(`notifications.${currentUser.id}`);
-
-    channel.listen(".notification.sent", (event: AppNotification) => {
+    subscribeToNotifications(currentUser.id, (event) => {
       setNotifications((prev) => [event, ...prev]);
       setUnreadCount((prev) => prev + 1);
     });
-
-    return () => {
-      echo.leave(`notifications.${currentUser.id}`);
-    };
   }, [currentUser]);
 
   async function markAsRead(id: number) {

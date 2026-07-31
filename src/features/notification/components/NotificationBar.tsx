@@ -3,6 +3,7 @@ import { Bell } from "lucide-react";
 import useNotifications from "../../../features/notification/hooks/useNotifications";
 import { formatDate } from "../../../shared/utils/formatDate";
 import type { AppNotification } from "../types/AppNotification";
+import NotificationSkeletonList from "./NotificationSkeletonList";
 
 function buildNotificationText(notification: AppNotification): string {
   const name = notification.from_user.user_name;
@@ -65,12 +66,10 @@ const NotificationBar = () => {
           </div>
 
           {loading ? (
-            <p className="text-center text-xs text-gray-400 py-6">
-              جاري التحميل...
-            </p>
+            <NotificationSkeletonList />
           ) : notifications.length === 0 ? (
             <p className="text-center text-xs text-gray-400 py-6">
-              لا توجد إشعارات حتى الآن
+              لا توجد إشعارات حتى الأن
             </p>
           ) : (
             notifications.map((notification) => (
