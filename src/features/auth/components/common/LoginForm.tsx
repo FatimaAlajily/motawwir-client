@@ -116,15 +116,27 @@ const LoginForm = () => {
         text={isLocked ? `انتظر (${time}ث)` : "تسجيل الدخول"}
         loading={loading || isLocked}
       />
-      <div className="text-center text-sm text-gray-600 mt-2">
-        ليس لديك حساب ؟{" "}
-        <Link
-          to="/register"
-          className="text-purple-700 font-semibold hover:underline"
-        >
-          إنشاء حساب
-        </Link>
-      </div>
+     <div className="flex flex-col text-sm text-gray-600 mt-2 gap-2">
+  <div className="text-center">
+    ليس لديك حساب ؟{" "}
+    <Link
+      to="/register"
+      className="text-purple-700 font-semibold hover:underline"
+    >
+      إنشاء حساب
+    </Link>
+  </div>
+  
+  <div className="text-right">
+    <Link
+      to="/dashboard" /* قم بتعديل المسار حسب الحاجة */
+      className="text-gray-600 font-medium hover:text-purple-700 hover:underline"
+    >
+      الدخول كزائر
+    </Link>
+  </div>
+</div>
+      
     </form>
   );
 };
