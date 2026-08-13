@@ -41,7 +41,7 @@ export default function NexusTab({ profileUserId }: Props) {
       <div className="p-6">
         <TabEmptyState
           icon={<Newspaper size={32} />}
-          title="آخر المنشورات"
+          title="منشوراتي"
           description="لا توجد منشورات خاصة بالمستخدم حالياً."
         />
       </div>
