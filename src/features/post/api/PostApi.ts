@@ -45,6 +45,7 @@ export async function getPostsRequest(params?: {
   type?: PostType;
   search?: string;
   page?: number;
+  user_id?: number; // فلترة منشورات مستخدم معيّن (تستخدم بتاب "آخر المنشورات" بالبروفايل)
 }): Promise<PostPagination<Post> | { status: "error"; message: string }> {
   try {
     const response = await axiosClient.get<PostPagination<Post>>("posts", {

@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { Menu, Search, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import CreateButton from "./CreateButton";
 import AvatarBar from "./AvatarBar";
 import motawwerLogo from "../../../assets/images/Logo.png";
 import NotificationBar from "../../../features/notification/components/NotificationBar";
+import { useAuthStore } from "../../../features/auth/store/useAuthStore";
 
 type NavBarProps = {
   onMenuClick: () => void;
@@ -14,6 +16,8 @@ type NavBarProps = {
 
 export function NavBar({ onMenuClick }: NavBarProps) {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const currentUser = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
 
   if (isMobileSearchOpen) {
     return (
@@ -76,9 +80,20 @@ export function NavBar({ onMenuClick }: NavBarProps) {
       </div>
 
       <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
-        <CreateButton />
-        <NotificationBar />
-        <AvatarBar />
+        {currentUser ? (
+          <>
+            <CreateButton />
+            <NotificationBar />
+            <AvatarBar />
+          </>
+        ) : (
+          <button
+            onClick={() => navigate("/")}
+            className="text-xs md:text-sm font-bold bg-[#6620F3] text-white px-4 py-2 rounded-full hover:bg-[#5a1cd8] transition-colors shadow-xs"
+          >
+            تسجيل الدخول
+          </button>
+        )}
       </div>
     </div>
   );

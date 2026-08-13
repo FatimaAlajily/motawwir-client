@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import SerchRabbitImage from "../../../assets/images/IconSearch.png";
 import { usePostSearchStore } from "../../store/usePostSearchStore";
 
@@ -9,6 +10,19 @@ type SearchBarProps = {
 const SearchBar = ({ autoFocus }: SearchBarProps) => {
   const query = usePostSearchStore((state) => state.query);
   const setQuery = usePostSearchStore((state) => state.setQuery);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleChange = (value: string) => {
+    setQuery(value);
+
+    // إذا كان المستخدم في صفحة المستخدمين
+    // وينشئ بحثًا، انتقل إلى الصفحة الرئيسية
+    if (value.trim() && location.pathname === "/dashbord/users") {
+      navigate("/dashbord");
+    }
+  };
 
   return (
     <div className="flex items-center w-full">
@@ -28,7 +42,7 @@ const SearchBar = ({ autoFocus }: SearchBarProps) => {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
           autoFocus={autoFocus}
           placeholder="ابحث عن منشور ما . . ."
           className="w-full py-2.5 pr-10 pl-3 text-sm text-gray-700 bg-gray-100 rounded-full border focus:ring-2 outline-0 focus:ring-[#dfd2f14a]"

@@ -18,3 +18,13 @@ export async function getUsersRequest(params?: {
     return HandleApiError(error) as { status: "error"; message: string };
   }
 }
+
+// ✅ إضافة دالة تسجيل الخروج هنا
+export async function logoutRequest() {
+  try {
+    const response = await axiosClient.post("logout");
+    return response.data;
+  } catch (error) {
+    return HandleApiError(error);
+  }
+}

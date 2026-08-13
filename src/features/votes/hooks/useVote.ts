@@ -16,13 +16,11 @@ const useVote = ({ type, id }: VoteTarget) => {
     setLoading(true);
     setError("");
 
-const response = await storeVoteRequest({
-  type,
-  custom,
-  ...(type === "post"
-    ? { post_id: id }
-    : { comment_id: id }),
-});
+    const response = await storeVoteRequest({
+      type,
+      custom,
+      ...(type === "post" ? { post_id: id } : { comment_id: id }),
+    });
 
     setLoading(false);
 
@@ -30,6 +28,7 @@ const response = await storeVoteRequest({
       return response.data;
     }
 
+    // هنا يتم استقبال رسالة الخطأ من السيرفر (مثلاً "Unauthenticated")
     setError(response.message);
     return null;
   }

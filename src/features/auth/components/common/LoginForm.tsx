@@ -3,10 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 import { InputField } from "../ui/InputField";
 import { ButtonComponent } from "../ui/Button";
+import { useAuthStore } from "../../store/useAuthStore";
 import "../../../../styles/theme.css";
 
 const LoginForm = () => {
   const { loading, error, handleLogin } = useLogin();
+  const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -128,13 +130,17 @@ const LoginForm = () => {
   </div>
   
   <div className="text-right">
-    <Link
-      to="/dashboard" /* قم بتعديل المسار حسب الحاجة */
-      className="text-gray-600 font-medium hover:text-purple-700 hover:underline"
-    >
-      الدخول كزائر
-    </Link>
-  </div>
+  <Link
+    to="/dashbord"
+    onClick={() => {
+      localStorage.removeItem("token");
+      setUser(null); // <-- هذا السطر هو الذي يحل المشكلة ويستخدم المتغير
+    }}
+    className="text-gray-600 font-medium hover:text-purple-700 hover:underline"
+  >
+    الدخول كزائر
+  </Link>
+</div>
 </div>
       
     </form>

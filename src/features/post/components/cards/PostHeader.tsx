@@ -1,21 +1,25 @@
-import { Bookmark } from "lucide-react";
 import type { ReactNode } from "react";
 import { formatDate } from "../../../../shared/utils/formatDate";
+import SaveButton from "../ui/SaveButton";
 
 type PostHeaderProps = {
+  postId: number;
   avatar: string;
   userName: string;
   createdAt: string;
   extraAction?: ReactNode;
   showBookmark?: boolean;
+  initialSaved?: boolean;
 };
 
 const PostHeader = ({
+  postId,
   avatar,
   userName,
   createdAt,
   extraAction,
   showBookmark = true,
+  initialSaved = false,
 }: PostHeaderProps) => {
   return (
     <div className="flex items-start justify-between mb-2">
@@ -46,12 +50,7 @@ const PostHeader = ({
         <div className="flex items-center gap-0.5 shrink-0">
           {extraAction}
           {showBookmark && (
-            <button
-              type="button"
-              className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5"
-            >
-              <Bookmark size={16} />
-            </button>
+            <SaveButton postId={postId} initialSaved={initialSaved} />
           )}
         </div>
       )}

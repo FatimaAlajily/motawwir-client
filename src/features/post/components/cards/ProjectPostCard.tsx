@@ -20,7 +20,7 @@ const ProjectPostCard = ({
   isOwner,
 }: ProjectPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const comments = usePostComments(post.id); // + جديد
+  const comments = usePostComments(post.id);
   const [votes, setVotes] = useState(post.votes);
 
   const visibleSkills = isExpanded
@@ -39,6 +39,7 @@ const ProjectPostCard = ({
     >
       {/* -------- Header -------- */}
       <PostHeader
+        postId={post.id}
         avatar={post.user.avatar}
         userName={post.user.user_name}
         createdAt={post.created_at}
@@ -139,16 +140,12 @@ const ProjectPostCard = ({
 
       <hr className="border-gray-100 mb-1.5" />
       <PostFooter
-        // upvotes={post.votes.upvotes}
-        // downvotes={post.votes.downvotes}
-        // ai={post.votes.ai}
         commentsLabel="التعليقات"
         onCommentsClick={comments.toggle}
         postId={post.id}
         upvotes={votes.upvotes}
         downvotes={votes.downvotes}
         ai={votes.ai}
-        // commentsLabel="الأجوبة"
         onVoteSuccess={setVotes}
         isOwner={isOwner}
       />

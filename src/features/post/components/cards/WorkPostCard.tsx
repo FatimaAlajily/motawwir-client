@@ -30,20 +30,13 @@ const WorkPostCard = ({ post, deleteAction, isOwner }: WorkPostCardProps) => {
       className="bg-white border border-gray-100 rounded-xl p-2.5 shadow-sm hover:shadow-md transition-shadow w-full overflow-hidden"
       style={{ fontFamily: "Tajawal" }}
     >
-      {/* -------- Header -------- */}
+      {/* -------- Header (showBookmark يتفعّل تلقائياً بدون ما نمرره، عشان WorkPostCard ما كان فيه زر حفظ أصلاً) -------- */}
       <PostHeader
+        postId={post.id}
         avatar={post.user.avatar}
         userName={post.user.user_name}
         createdAt={post.created_at}
-        extraAction={
-          <>
-            {deleteAction}
-            <button
-              type="button"
-              className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5"
-            ></button>
-          </>
-        }
+        extraAction={deleteAction}
       />
 
       {/* -------- Title -------- */}

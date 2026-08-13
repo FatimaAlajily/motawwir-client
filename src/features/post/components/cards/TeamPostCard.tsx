@@ -1,8 +1,9 @@
 import { useState, type ReactNode } from "react";
-import { Bookmark, ArrowLeft, ChevronDown } from "lucide-react";
+import { ArrowLeft, ChevronDown } from "lucide-react";
 import type { TeamPost } from "../../types/kinds/TeamPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import SaveButton from "../ui/SaveButton";
 import { usePostComments } from "../../hooks/usePostComments";
 import CommentSection from "../../../comment/components/common/CommentSection";
 
@@ -35,16 +36,12 @@ const TeamPostCard = ({ post, deleteAction, isOwner }: TeamPostCardProps) => {
       <div className="flex items-start justify-between mb-1.5">
         <h3 className="text-[13px] font-bold text-motaweer">{post.title}</h3>
 
-        <button
-          type="button"
-          className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5 shrink-0"
-        >
-          <Bookmark size={15} />
-        </button>
+        <SaveButton postId={post.id} size={15} className="shrink-0" />
       </div>
 
       {/* -------- User Header -------- */}
       <PostHeader
+        postId={post.id}
         avatar={post.user.avatar}
         userName={post.user.user_name}
         createdAt={post.created_at}
