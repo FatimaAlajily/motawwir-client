@@ -4,7 +4,7 @@ export type TabType = "echo" | "nexus" | "vault";
 
 const tabs: { id: TabType; label: string }[] = [
   { id: "echo", label: "جدار الصدى" },
-  { id: "nexus", label: "منشوراتي" },
+  { id: "nexus", label: "منشورات خاصة" },
   { id: "vault", label: "الخزنة" },
 ];
 
