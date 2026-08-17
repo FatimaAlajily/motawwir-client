@@ -9,11 +9,6 @@ import type { Profile } from "../../types/user/Profile";
 import { InfoRow } from "../ui/InfoRow";
 import { SidebarSection } from "../ui/SidebarSection";
 
-type ProfileUI = Profile & {
-  postsCount?: number;
-  commentsCount?: number;
-};
-
 /* ── أيقونات SVG ── */
 
 const GithubIcon = ({ size = 15, className = "" }: { size?: number; className?: string }) => (
@@ -48,27 +43,11 @@ const getSocialIcon = (platform: string) => {
 };
 
 /* ══════════════════════════════════════
-   الإحصائيات
+   الإحصائيات (ملغاة)
    ══════════════════════════════════════ */
 
-export function ProfileStats({ profile }: { profile: ProfileUI }) {
-  return (
-    <div className="p-5 flex items-center justify-around text-center">
-      <div className="flex-1">
-        <div className="font-extrabold text-gray-900 text-lg">
-          {profile.postsCount ?? 0}
-        </div>
-        <div className="text-[11px] text-gray-400 font-medium mt-0.5">منشورات</div>
-      </div>
-      <div className="h-8 w-[1px] bg-gray-100" />
-      <div className="flex-1">
-        <div className="font-extrabold text-gray-900 text-lg">
-          {profile.commentsCount ?? 0}
-        </div>
-        <div className="text-[11px] text-gray-400 font-medium mt-0.5">تعليقات</div>
-      </div>
-    </div>
-  );
+export function ProfileStats() {
+  return null;
 }
 
 /* ══════════════════════════════════════

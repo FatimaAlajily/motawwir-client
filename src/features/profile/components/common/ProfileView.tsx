@@ -21,8 +21,6 @@ import VaultTab from "../tabs/VaultTab";
 
 type ProfileUI = Profile & {
   votraScore?: string;
-  postsCount?: number;
-  commentsCount?: number;
 };
 
 type Props = {
@@ -55,8 +53,6 @@ export default function ProfileView({ userId }: Props) {
   const uiProfile: ProfileUI = {
     ...profile,
     votraScore: "0",
-    postsCount: 0,
-    commentsCount: 0,
   };
 
   const isOwner = !userId || uiProfile.user?.id === currentUserId;
@@ -114,7 +110,7 @@ export default function ProfileView({ userId }: Props) {
             </div>
 
             <div className="lg:col-span-1 text-right space-y-1">
-              <ProfileStats profile={uiProfile} />
+              <ProfileStats />
               <ProfileLinks profile={uiProfile} isOwner={isOwner} />
               <ProfileContact profile={uiProfile} isOwner={isOwner} />
               <ProfileSkills skills={uiProfile.skill ?? []} isOwner={isOwner} />
