@@ -9,6 +9,7 @@ import Pagination from "../../post/components/inputs/Pagination";
 import { useUserSearchStore } from "../store/useUserSearchStore";
 import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
 import NO_RESULTS_IMAGE from "../../../assets/images/noresultfound.png";
+import { useAuthStore } from "../../auth/store/useAuthStore";
 
 const UsersPage = () => {
   const [role, setRole] = useState<UserType | "all">("all");
@@ -17,15 +18,24 @@ const UsersPage = () => {
   const rawSearchQuery = useUserSearchStore((state) => state.query);
   const searchQuery = useDebouncedValue(rawSearchQuery, 400);
 
-  const { users, meta, loading, error } = useFetchUsers(
+  const { users, setUsers, meta, loading, error } = useFetchUsers(
     role,
     page,
     searchQuery
   );
 
+  const currentUser = useAuthStore((state) => state.user);
+  const isCurrentUserAdmin = currentUser?.role === "admin";
+
   function handleRoleChange(newRole: UserType | "all") {
     setRole(newRole);
     setPage(1);
+  }
+
+  function handleBanStatusChange(userId: number, isBanned: boolean) {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, is_banned: isBanned } : u))
+    );
   }
 
   if (error) {
@@ -62,7 +72,14 @@ const UsersPage = () => {
             ? Array.from({ length: 8 }).map((_, i) => (
                 <UserCardSkeleton key={i} />
               ))
-            : users.map((user) => <UserCard key={user.id} user={user} />)}
+            : users.map((user) => (
+                <UserCard
+                  key={user.id}
+                  user={user}
+                  isCurrentUserAdmin={isCurrentUserAdmin}
+                  onBanStatusChange={handleBanStatusChange}
+                />
+              ))}
         </div>
       )}
 
