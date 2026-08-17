@@ -32,9 +32,17 @@ const UsersPage = () => {
     setPage(1);
   }
 
-  function handleBanStatusChange(userId: number, isBanned: boolean) {
+  function handleBanStatusChange(
+    userId: number,
+    isBanned: boolean,
+    banReason?: string | null
+  ) {
     setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, is_banned: isBanned } : u))
+      prev.map((u) =>
+        u.id === userId
+          ? { ...u, is_banned: isBanned, ban_reason: banReason ?? null }
+          : u
+      )
     );
   }
 
