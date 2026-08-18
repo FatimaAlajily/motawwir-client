@@ -2,8 +2,8 @@
 import axios, { AxiosError } from "axios";
 
 const axiosClient = axios.create({
-  // baseURL: "http://localhost:8000/api",
-  baseURL: "//192.168.43.173:8000/api",
+  baseURL: "http://localhost:8000/api",
+  // baseURL: "//192.168.43.173:8000/api",
 
   headers: {
     Accept: "application/json",

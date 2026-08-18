@@ -89,6 +89,7 @@ const UserCard = ({
             <UserOptionsMenu
               userId={user.id}
               isBanned={!!user.is_banned}
+              
               currentBanReason={user.ban_reason}
               onStatusChange={onBanStatusChange}
             />
