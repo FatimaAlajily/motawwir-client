@@ -8,7 +8,7 @@ import UserCardSkeleton from "../components/loading/UserCardSkeleton";
 import Pagination from "../../post/components/inputs/Pagination";
 import { useUserSearchStore } from "../store/useUserSearchStore";
 import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
-import NO_RESULTS_IMAGE from "../../../assets/images/noresultfound.png";
+import NO_RESULTS_IMAGE from "../../../assets/images/searchnotfound.png";
 import { useAuthStore } from "../../auth/store/useAuthStore";
 
 const UsersPage = () => {
@@ -32,9 +32,17 @@ const UsersPage = () => {
     setPage(1);
   }
 
-  function handleBanStatusChange(userId: number, isBanned: boolean) {
+  function handleBanStatusChange(
+    userId: number,
+    isBanned: boolean,
+    banReason?: string | null
+  ) {
     setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, is_banned: isBanned } : u))
+      prev.map((u) =>
+        u.id === userId
+          ? { ...u, is_banned: isBanned, ban_reason: banReason ?? null }
+          : u
+      )
     );
   }
 

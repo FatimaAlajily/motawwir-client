@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   MoreVertical,
   Ban,
@@ -12,19 +13,37 @@ import { banUserRequest, unbanUserRequest } from "../../api/UserApi";
 type UserOptionsMenuProps = {
   userId: number;
   isBanned: boolean;
-  onStatusChange: (userId: number, isBanned: boolean) => void;
+  currentBanReason?: string | null;
+  onStatusChange: (
+    userId: number,
+    isBanned: boolean,
+    banReason?: string | null
+  ) => void;
 };
 
 const UserOptionsMenu = ({
   userId,
   isBanned,
+  currentBanReason,
   onStatusChange,
 }: UserOptionsMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [banReason, setBanReason] = useState("");
+  const [banReasonInput, setBanReasonInput] = useState("");
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    if (isMenuOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setMenuPos({
+        top: rect.top + window.scrollY, // فوق الزر
+        left: rect.right + window.scrollX, // محاذاة يمين الزر
+      });
+    }
+  }, [isMenuOpen]);
 
   function handleActionClick() {
     setIsMenuOpen(false);
@@ -39,17 +58,17 @@ const UserOptionsMenu = ({
       if (isBanned) {
         const response = await unbanUserRequest(userId);
         if (response.status === "success") {
-          onStatusChange(userId, false);
+          onStatusChange(userId, false, null);
           setIsModalOpen(false);
         } else {
           setError(response.message);
         }
       } else {
-        const response = await banUserRequest(userId, banReason);
+        const response = await banUserRequest(userId, banReasonInput);
         if (response.status === "success") {
-          onStatusChange(userId, true);
+          onStatusChange(userId, true, banReasonInput || null);
           setIsModalOpen(false);
-          setBanReason("");
+          setBanReasonInput("");
         } else {
           setError(response.message);
         }
@@ -64,6 +83,7 @@ const UserOptionsMenu = ({
   return (
     <div className="relative">
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => setIsMenuOpen((prev) => !prev)}
         className="text-gray-400 hover:text-[#6620F3] transition-colors p-1 rounded-full hover:bg-gray-100"
@@ -72,33 +92,50 @@ const UserOptionsMenu = ({
         <MoreVertical size={18} />
       </button>
 
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-10"
-          onClick={() => setIsMenuOpen(false)}
-        />
-      )}
+      {isMenuOpen &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <div
+              dir="rtl"
+              className="fixed w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-50 overflow-hidden"
+              style={{
+                fontFamily: "'Tajawal', sans-serif",
+                top: menuPos.top,
+                left: menuPos.left,
+                transform: "translate(-100%, -100%)", // يفتح للأعلى ولليسار من نقطة الزر
+              }}
+            >
+              {isBanned && (
+                <div className="px-3 py-2 border-b border-gray-100 bg-red-50">
+                  <p className="text-[10px] font-bold text-red-500 mb-0.5">
+                    سبب الحظر
+                  </p>
+                  <p className="text-[11px] text-gray-600 leading-snug">
+                    {currentBanReason || "لم يُذكر سبب"}
+                  </p>
+                </div>
+              )}
 
-      {isMenuOpen && (
-        <div
-          dir="rtl"
-          className="absolute left-0 top-full mt-1 w-36 bg-white border border-gray-100 rounded-xl shadow-lg z-20 overflow-hidden"
-          style={{ fontFamily: "'Tajawal', sans-serif" }}
-        >
-          <button
-            type="button"
-            onClick={handleActionClick}
-            className={`flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold transition-colors ${
-              isBanned
-                ? "text-green-600 hover:bg-green-50"
-                : "text-red-600 hover:bg-red-50"
-            }`}
-          >
-            {isBanned ? <ShieldCheck size={14} /> : <Ban size={14} />}
-            {isBanned ? "إلغاء الحظر" : "حظر المستخدم"}
-          </button>
-        </div>
-      )}
+              <button
+                type="button"
+                onClick={handleActionClick}
+                className={`flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold transition-colors ${
+                  isBanned
+                    ? "text-green-600 hover:bg-green-50"
+                    : "text-red-600 hover:bg-red-50"
+                }`}
+              >
+                {isBanned ? <ShieldCheck size={14} /> : <Ban size={14} />}
+                {isBanned ? "إلغاء الحظر" : "حظر المستخدم"}
+              </button>
+            </div>
+          </>,
+          document.body
+        )}
 
       <Modal
         show={isModalOpen}
@@ -124,8 +161,8 @@ const UserOptionsMenu = ({
 
             {!isBanned && (
               <textarea
-                value={banReason}
-                onChange={(e) => setBanReason(e.target.value)}
+                value={banReasonInput}
+                onChange={(e) => setBanReasonInput(e.target.value)}
                 placeholder="سبب الحظر (اختياري)"
                 className="w-full mt-2 px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-violet-100 resize-none"
                 rows={3}

@@ -5,7 +5,11 @@ import UserOptionsMenu from "../ui/UserOptionsMenu";
 type UserCardProps = {
   user: User;
   isCurrentUserAdmin: boolean;
-  onBanStatusChange: (userId: number, isBanned: boolean) => void;
+  onBanStatusChange: (
+    userId: number,
+    isBanned: boolean,
+    banReason?: string | null
+  ) => void;
 };
 
 const ROLE_LABELS: Record<string, string> = {
@@ -86,6 +90,8 @@ const UserCard = ({
             <UserOptionsMenu
               userId={user.id}
               isBanned={!!user.is_banned}
+              
+              currentBanReason={user.ban_reason}
               onStatusChange={onBanStatusChange}
             />
           )}
