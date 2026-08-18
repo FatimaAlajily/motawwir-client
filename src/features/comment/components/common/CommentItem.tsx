@@ -33,6 +33,7 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [votes, setVotes] = useState(comment.votes);
+  const [voteMessage, setVoteMessage] = useState("");
   const { loading, handleVote } = useVote({
     type: "comment",
     id: comment.id,
@@ -42,7 +43,17 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
   const isAdmin = currentUser?.role === "admin";
   const canManage = isOwner || isAdmin;
 
+  function showGuestMessage() {
+    setVoteMessage("يجب تسجيل الدخول للتصويت");
+    setTimeout(() => setVoteMessage(""), 3000);
+  }
+
   async function handleClick(custom: "upvote" | "downvote" | "ai") {
+    if (!currentUser) {
+      showGuestMessage();
+      return;
+    }
+
     if (loading || isOwner) return;
 
     const updatedVotes = await handleVote(custom);
@@ -51,6 +62,7 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
       setVotes(updatedVotes);
     }
   }
+
   async function handleEdit(text: string) {
     const res = (await onEdit(comment.id, text)) as {
       status?: string;
@@ -69,6 +81,7 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
     setIsDeleting(false);
   }
 
+console.log("isOwner:", isOwner, "loading:", loading, "currentUser:", currentUser);
   return (
     <div className="flex items-start gap-3 py-4">
       <CommentAvatar src={comment.user.avatar} alt={comment.user.user_name} />
@@ -133,6 +146,12 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
                   ذكاء اصطناعي ({votes?.ai ?? 0})
                 </button>
               </div>
+
+              {voteMessage && (
+                <p className="mt-2 text-[11px] text-red-500">
+                  {voteMessage}
+                </p>
+              )}
             </>
           )}
         </CommentBubble>

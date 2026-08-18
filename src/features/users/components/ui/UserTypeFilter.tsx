@@ -8,10 +8,10 @@ type UserTypeFilterProps = {
 };
 
 const FILTERS: { value: FilterValue; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "developer", label: "Developer" },
-  { value: "company", label: "Company" },
-  { value: "client", label: "Client" },
+  { value: "all", label: "الكل" },
+  { value: "developer", label: "مطور" },
+  { value: "company", label: "شركة" },
+  { value: "client", label: "عميل" },
 ];
 
 const UserTypeFilter = ({ value, onChange }: UserTypeFilterProps) => {

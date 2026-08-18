@@ -29,6 +29,7 @@ const QuestionPostCard = ({
     >
       {/* -------- Header -------- */}
       <PostHeader
+        postId={post.id}
         avatar={post.user.avatar}
         userName={post.user.user_name}
         createdAt={post.created_at}

@@ -30,6 +30,17 @@ export async function banUserRequest(
       `admin/users/${userId}/ban`,
       { ban_reason }
     );
+
+    return response.data;
+  } catch (error) {
+    return HandleApiError(error);
+  }
+}
+
+
+export async function logoutRequest() {
+  try {
+    const response = await axiosClient.post("logout");
     return response.data;
   } catch (error) {
     return HandleApiError(error);
@@ -48,3 +59,4 @@ export async function unbanUserRequest(
     return HandleApiError(error);
   }
 }
+

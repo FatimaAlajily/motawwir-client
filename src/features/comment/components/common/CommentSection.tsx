@@ -2,6 +2,7 @@ import useComments from "../../hooks/useComments";
 import type { CommentTarget } from "../../types/comment/Comment";
 import { Input } from "../ui/Input";
 import { List } from "../ui/List";
+import { useAuthStore } from "../../../auth/store/useAuthStore";
 
 type Props = {
   target: CommentTarget;
@@ -9,6 +10,9 @@ type Props = {
 };
 
 export default function CommentSection({ target, currentUserId }: Props) {
+  const currentUser = useAuthStore((state) => state.user);
+  const isLogged = Boolean(currentUserId || currentUser);
+
   const {
     comments,
     fetching,
@@ -25,7 +29,16 @@ export default function CommentSection({ target, currentUserId }: Props) {
     <div className="bg-white border border-purple-100/80 rounded-3xl p-5" dir="rtl">
       <h3 className="text-sm font-bold text-gray-900 mb-4 text-right">التعليقات</h3>
 
-      <Input onSubmit={addComment} loading={submitting} />
+      {/* التحقق من حالة المستخدم: إذا كان مسجلاً يظهر حقل الإدخال، وإذا كان زائراً تظهر رسالة تنبيهية فقط دون توجيه إجباري */}
+      {isLogged ? (
+        <Input onSubmit={addComment} loading={submitting} />
+      ) : (
+        <div className="bg-red-50/50 border border-red-100 rounded-2xl p-4 text-center mb-4">
+          <p className="text-xs text-red-500 font-medium">
+            يجب <span className="font-bold underline">تسجيل الدخول</span> لنشر تعليق جديد.
+          </p>
+        </div>
+      )}
 
       {error && <p className="text-xs text-red-500 font-medium mt-2">{error}</p>}
 

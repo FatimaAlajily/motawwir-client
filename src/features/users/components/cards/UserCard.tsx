@@ -45,7 +45,8 @@ const UserCard = ({
       <div className="flex items-center gap-3.5 mb-4">
         <div className="relative shrink-0">
           <img
-            src={user.avatar}
+            // [التعديل هنا]: استخدام رابط الصورة المباشر أو التأكد من توفره بشكل آمن
+            src={user.avatar ? user.avatar : "/default-avatar.png"}
             alt={user.user_name}
             className="w-12 h-12 rounded-full object-cover ring-2 ring-[#9723bb]"
           />

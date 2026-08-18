@@ -40,7 +40,7 @@ const UsersPage = () => {
 
   if (error) {
     return (
-      <p className="text-centeUsersPage.tsxr text-red-500 py-10">{error}</p>
+      <p className="text-center text-red-500 py-10">{error}</p>
     );
   }
 

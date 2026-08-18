@@ -22,7 +22,9 @@ import {
 import "../../../styles/theme.css";
 import SideBarIcons from "../common/SideBarIcons";
 import rabbitSidebar from "../../../assets/images/rabbit-sidebar.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { logoutRequest } from "../../../features/users/api/UserApi";
+import { useAuthStore } from "../../../features/auth/store/useAuthStore";
 
 type SideBarProps = {
   onNavigate?: () => void;
@@ -41,6 +43,30 @@ const NAV_LINKS = [
 
 export function SideBar({ onNavigate }: SideBarProps) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const currentUser = useAuthStore((state) => state.user); // جلب المستخدم الحالي
+  const logoutStore = useAuthStore((state) => state.logout);
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await logoutRequest();
+    } catch (error) {
+      console.error("فشل تسجيل الخروج من الخادم:", error);
+    } finally {
+      localStorage.removeItem("token");
+
+      if (logoutStore) {
+        logoutStore();
+      }
+
+      if (onNavigate) {
+        onNavigate();
+      }
+
+      navigate("/");
+    }
+  };
 
   return (
     <Sidebar
@@ -89,16 +115,19 @@ export function SideBar({ onNavigate }: SideBarProps) {
               className="h-24 w-24 object-contain"
             />
           </div>
-          <Link to={"/"} onClick={onNavigate}>
-            <SidebarItem
-              icon={() => (
-                <SideBarIcons icon={LogOut} color={"text-[4b1e8a]"} size={16} />
-              )}
-              className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full"
-            >
-              <span className="font-semibold text-sm">تسجيل الخروج</span>
-            </SidebarItem>
-          </Link>
+          {/* إظهار زر تسجيل الخروج فقط إذا كان المستخدم مسجلاً للدخول */}
+          {currentUser && (
+            <Link to="#" onClick={handleLogout}>
+              <SidebarItem
+                icon={() => (
+                  <SideBarIcons icon={LogOut} color={"text-[4b1e8a]"} size={16} />
+                )}
+                className="text-gray-700 font-semibold hover:bg-gray-100 rounded-full"
+              >
+                <span className="font-semibold text-sm">تسجيل الخروج</span>
+              </SidebarItem>
+            </Link>
+          )}
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>

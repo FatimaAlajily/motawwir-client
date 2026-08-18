@@ -4,7 +4,9 @@ import useFetchPosts from "../hooks/useFetchPosts";
 import PostCard from "../components/cards/PostCard";
 import type { Post } from "../types/common/Post";
 import EditPostModal from "../components/ui/EditPostModal";
+import CreatePostModal from "../components/models/CreatePostModal";
 import SkeletonCard from "../components/loading/SkeletonCard";
+import { usePostSearchStore } from "../../../shared/store/usePostSearchStore";
 import {
   MessageCircle,
   UserPlus,
@@ -76,8 +78,10 @@ const PostSection = ({
 const HomePage = () => {
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.user);
+  const query = usePostSearchStore((state) => state.query);
 
   const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // ✅ حالة فتح نافذة إنشاء المنشور
 
   const { users, loading: usersLoading } = useFetchUsers("all", 1, "");
   const suggestedUsers = users.slice(0, 8);
@@ -86,24 +90,33 @@ const HomePage = () => {
     posts: questionPosts,
     setPosts: setQuestionPosts,
     loading: loadingQ,
-  } = useFetchPosts("question", 1, "");
+  } = useFetchPosts("question", 1, query);
   const {
     posts: workPosts,
     setPosts: setWorkPosts,
     loading: loadingW,
-  } = useFetchPosts("work", 1, "");
+  } = useFetchPosts("work", 1, query);
   const {
     posts: newPosts,
     setPosts: setNewPosts,
     loading: loadingN,
-  } = useFetchPosts("new", 1, "");
+  } = useFetchPosts("new", 1, query);
 
   const { posts: projectPosts, loading: loadingP } = useFetchPosts(
     "project",
     1,
     ""
   );
-  const { posts: teamPosts, loading: loadingT } = useFetchPosts("team", 1, "");
+  const { posts: teamPosts, loading: loadingT } = useFetchPosts("team", 1, query);
+
+  // دالة للتحقق من تسجيل الدخول قبل فتح النافذة أو توجيه المستخدم
+  const handleOpenCreateModal = () => {
+    if (!currentUser) {
+      navigate("/");
+    } else {
+      setIsCreateModalOpen(true);
+    }
+  };
 
   function handlePostDeleted(deletedId: number, type: string) {
     const setters: Record<
@@ -139,26 +152,26 @@ const HomePage = () => {
   }
 
   return (
-    // الحاوية الرئيسية: عمودية على الجوال، أفقية على الشاشات الكبيرة
     <div className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto w-full">
       {/* ========== العمود الأوسط: الأقسام ========== */}
-      {/* ✅ order-2 على الجوال (يسافل)، lg:order-1 على الكبيرة (يمين) */}
       <main className="flex-1 w-full order-2 lg:order-1">
-        {/* صندوق الإنشاء السريع */}
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 mb-8">
-          <img
-            src={currentUser?.avatar || "https://via.placeholder.com/40"}
-            className="w-10 h-10 rounded-full object-cover ring-2 ring-[#F4F0FF]"
-            alt="me"
-          />
-          <input
-            type="text"
-            placeholder="شارك فكرتك، سؤالك ..."
-            className="bg-violet-100 flex-1 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#dfd2f14a] cursor-pointer"
-            readOnly
-            onClick={() => navigate("/dashbord/posts/question")}
-          />
-        </div>
+        {/* صندوق الإنشاء السريع (يظهر للمستخدمين المسجلين فقط) */}
+        {currentUser && (
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 mb-8">
+            <img
+              src={currentUser?.avatar || "https://via.placeholder.com/40"}
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-[#F4F0FF]"
+              alt="me"
+            />
+            <input
+              type="text"
+              placeholder="شارك فكرتك، سؤالك ..."
+              className="bg-violet-100 flex-1 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#dfd2f14a] cursor-pointer"
+              readOnly
+              onClick={handleOpenCreateModal} // ✅ فتح النافذة المنبثقة عند النقر
+            />
+          </div>
+        )}
 
         <PostSection
           title="أحدث الأسئلة"
@@ -195,7 +208,6 @@ const HomePage = () => {
       </main>
 
       {/* ========== العمود الأيسر: الكروت الجانبية ========== */}
-      {/* ✅ order-1 على الجوال (يصعد للأعلى)، lg:order-2 على الكبيرة (يبقى يسار) */}
       <aside className="w-full lg:w-80 flex flex-col gap-6 shrink-0 order-1 lg:order-2">
         {/* كارد الترحيب */}
         <div className="bg-linear-to-l from-[#4b1e8a] to-[#8e52dc] p-5 rounded-2xl text-white shadow-md">
@@ -206,7 +218,7 @@ const HomePage = () => {
             شارك معرفتك مع مجتمع مطور واكسب نقاط السمعة
           </p>
           <button
-            onClick={() => navigate("/dashbord/posts/question")}
+            onClick={handleOpenCreateModal} // ✅ فتح النافذة المنبثقة عند النقر على الزر أيضاً
             className="bg-white text-[#6620F3] text-xs font-bold px-4 py-2 rounded-full hover:bg-gray-100 transition-colors"
           >
             انشر منشورك الان
@@ -392,10 +404,17 @@ const HomePage = () => {
         </div>
       </aside>
 
+      {/* نافذة تعديل المنشور */}
       <EditPostModal
         post={editingPost}
         onClose={() => setEditingPost(null)}
         onUpdated={handlePostUpdated}
+      />
+
+      {/* ✅ نافذة اختيار نوع المنشور (CreatePostModal) */}
+      <CreatePostModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
       />
     </div>
   );
