@@ -3,7 +3,12 @@ import { storeVoteRequest } from "../api/VoteApi";
 import type { VoteDetails } from "../../../shared/types/VoteDetails";
 import type { VoteCustom } from "../types/VoteCustom";
 
-const useVote = (postId: number) => {
+type VoteTarget = {
+  type: "post" | "comment";
+  id: number;
+};
+
+const useVote = ({ type, id }: VoteTarget) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -12,9 +17,9 @@ const useVote = (postId: number) => {
     setError("");
 
     const response = await storeVoteRequest({
-      type: "post",
+      type,
       custom,
-      post_id: postId,
+      ...(type === "post" ? { post_id: id } : { comment_id: id }),
     });
 
     setLoading(false);
@@ -23,6 +28,7 @@ const useVote = (postId: number) => {
       return response.data;
     }
 
+    // هنا يتم استقبال رسالة الخطأ من السيرفر (مثلاً "Unauthenticated")
     setError(response.message);
     return null;
   }

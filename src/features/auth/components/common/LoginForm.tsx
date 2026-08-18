@@ -3,10 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 import { InputField } from "../ui/InputField";
 import { ButtonComponent } from "../ui/Button";
+import { useAuthStore } from "../../store/useAuthStore";
 import "../../../../styles/theme.css";
 
 const LoginForm = () => {
   const { loading, error, handleLogin } = useLogin();
+  const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -116,15 +118,31 @@ const LoginForm = () => {
         text={isLocked ? `انتظر (${time}ث)` : "تسجيل الدخول"}
         loading={loading || isLocked}
       />
-      <div className="text-center text-sm text-gray-600 mt-2">
-        ليس لديك حساب ؟{" "}
-        <Link
-          to="/register"
-          className="text-purple-700 font-semibold hover:underline"
-        >
-          إنشاء حساب
-        </Link>
-      </div>
+     <div className="flex flex-col text-sm text-gray-600 mt-2 gap-2">
+  <div className="text-center">
+    ليس لديك حساب ؟{" "}
+    <Link
+      to="/register"
+      className="text-purple-700 font-semibold hover:underline"
+    >
+      إنشاء حساب
+    </Link>
+  </div>
+  
+  <div className="text-right">
+  <Link
+    to="/dashbord"
+    onClick={() => {
+      localStorage.removeItem("token");
+      setUser(null); // <-- هذا السطر هو الذي يحل المشكلة ويستخدم المتغير
+    }}
+    className="text-gray-600 font-medium hover:text-purple-700 hover:underline"
+  >
+    الدخول كزائر
+  </Link>
+</div>
+</div>
+      
     </form>
   );
 };

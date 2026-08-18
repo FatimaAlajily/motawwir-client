@@ -1,8 +1,10 @@
 import { useState, type ReactNode } from "react";
-import { Bookmark } from "lucide-react";
 import type { NewPost } from "../../types/kinds/NewPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import SaveButton from "../ui/SaveButton";
+import CommentSection from "../../../comment/components/common/CommentSection";
+import { usePostComments } from "../../hooks/usePostComments";
 
 type NewPostCardProps = {
   post: NewPost;
@@ -17,10 +19,10 @@ function isVideoFile(url: string): boolean {
   return VIDEO_EXTENSIONS.includes(extension);
 }
 
-const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
+const NewPostCard = ({ post, deleteAction, isOwner }: NewPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [votes, setVotes] = useState(post.votes);
-
+  const comments = usePostComments(post.id);
 
   const hasFile = Boolean(post.file);
   const isVideo = post.file ? isVideoFile(post.file) : false;
@@ -35,6 +37,7 @@ const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
       <div className="flex items-start justify-between mb-1.5 gap-2">
         <div className="flex-1 min-w-0">
           <PostHeader
+            postId={post.id}
             avatar={post.user.avatar}
             userName={post.user.user_name}
             createdAt={post.created_at}
@@ -43,12 +46,7 @@ const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
           />
         </div>
 
-        <button
-          type="button"
-          className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5 shrink-0"
-        >
-          <Bookmark size={15} />
-        </button>
+        <SaveButton postId={post.id} size={15} className="shrink-0" />
       </div>
 
       {/* -------- Title -------- */}
@@ -104,14 +102,24 @@ const NewPostCard = ({ post, deleteAction , isOwner }: NewPostCardProps) => {
 
       {/* -------- Footer -------- */}
       <PostFooter
-      postId={post.id}
+        postId={post.id}
         upvotes={votes.upvotes}
         downvotes={votes.downvotes}
         ai={votes.ai}
         commentsLabel="الأجوبة"
         onVoteSuccess={setVotes}
         isOwner={isOwner}
+        onCommentsClick={comments.toggle}
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

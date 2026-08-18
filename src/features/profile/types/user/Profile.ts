@@ -5,6 +5,7 @@ export type ProfileUser = {
   user_name: string;
   role: Role;
   avatar: string | null;
+  votra?: number;
 };
 
 export type Profile = {

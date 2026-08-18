@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
 import type { Comment } from "../../types/comment/Comment";
 import { CommentAvatar } from "../ui/Avatar";
 import { Input } from "../ui/Input";
-import { Bubble as CommentBubble } from "../ui/BubbleProps"; // استيراد المكون بالاسم الجديد وتعديل مساره
+import { Bubble as CommentBubble } from "../ui/BubbleProps";
+import { OptionsMenu } from "../ui/OptionsMenu";
+import { Bot, MoveDown, MoveUp } from "lucide-react";
+import { useAuthStore } from "../../../auth/store/useAuthStore";
+import useVote from "../../../votes/hooks/useVote";
 
 type Props = {
   comment: Comment;
   isOwner: boolean;
   onEdit: (id: number, text: string) => Promise<unknown>;
-  onDelete: (id: number) => Promise<unknown>;
+  onDelete: (id: number, asAdmin?: boolean) => Promise<unknown>;
 };
 
 function timeAgo(dateString: string) {
@@ -29,27 +32,74 @@ function timeAgo(dateString: string) {
 export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [votes, setVotes] = useState(comment.votes);
+  const [voteMessage, setVoteMessage] = useState("");
+  const { loading, handleVote } = useVote({
+    type: "comment",
+    id: comment.id,
+  });
+
+  const currentUser = useAuthStore((state) => state.user);
+  const isAdmin = currentUser?.role === "admin";
+  const canManage = isOwner || isAdmin;
+
+  function showGuestMessage() {
+    setVoteMessage("يجب تسجيل الدخول للتصويت");
+    setTimeout(() => setVoteMessage(""), 3000);
+  }
+
+  async function handleClick(custom: "upvote" | "downvote" | "ai") {
+    if (!currentUser) {
+      showGuestMessage();
+      return;
+    }
+
+    if (loading || isOwner) return;
+
+    const updatedVotes = await handleVote(custom);
+
+    if (updatedVotes) {
+      setVotes(updatedVotes);
+    }
+  }
 
   async function handleEdit(text: string) {
-    const res = (await onEdit(comment.id, text)) as { status?: string };
-    if (res?.status !== "error") setIsEditing(false);
+    const res = (await onEdit(comment.id, text)) as {
+      status?: string;
+    };
+
+    if (res?.status !== "error") {
+      setIsEditing(false);
+    }
+
     return res;
   }
 
   async function handleDelete() {
     setIsDeleting(true);
-    await onDelete(comment.id);
+    await onDelete(comment.id, !isOwner && isAdmin);
     setIsDeleting(false);
   }
 
+console.log("isOwner:", isOwner, "loading:", loading, "currentUser:", currentUser);
   return (
     <div className="flex items-start gap-3 py-4">
       <CommentAvatar src={comment.user.avatar} alt={comment.user.user_name} />
 
       <div className="flex-1 min-w-0">
-        <CommentBubble 
-          userName={comment.user.user_name} 
+        <CommentBubble
+          userName={comment.user.user_name}
           createdAt={timeAgo(comment.created_at)}
+          actions={
+            canManage && !isEditing ? (
+              <OptionsMenu
+                onEdit={() => setIsEditing(true)}
+                onDelete={handleDelete}
+                loading={isDeleting}
+                asAdmin={!isOwner && isAdmin}
+              />
+            ) : undefined
+          }
         >
           {isEditing ? (
             <div className="mt-2">
@@ -60,35 +110,51 @@ export function CommentItem({ comment, isOwner, onEdit, onDelete }: Props) {
               />
             </div>
           ) : (
-            <p className="text-sm text-gray-700 mt-1 whitespace-pre-line break-words overflow-hidden">
-              {comment.text}
-            </p>
+            <>
+              <p className="mt-1 whitespace-pre-line wrap-break-word text-sm text-gray-700">
+                {comment.text}
+              </p>
+
+              <div className="flex items-center justify-start font-medium gap-4 text-[10px] text-[#6F7C8D] mt-3 pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => handleClick("upvote")}
+                  disabled={loading || isOwner}
+                  className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
+                >
+                  <MoveUp size={13} className="text-[#4B1E8A]" />
+                  دعم ({votes?.upvotes ?? 0})
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleClick("downvote")}
+                  disabled={loading || isOwner}
+                  className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
+                >
+                  <MoveDown size={13} className="text-[#4B1E8A]" />
+                  رفض ({votes?.downvotes ?? 0})
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleClick("ai")}
+                  disabled={loading || isOwner}
+                  className="flex items-center gap-1 hover:text-[#6620F3] transition-colors disabled:opacity-50"
+                >
+                  <Bot size={13} className="text-[#4B1E8A]" />
+                  ذكاء اصطناعي ({votes?.ai ?? 0})
+                </button>
+              </div>
+
+              {voteMessage && (
+                <p className="mt-2 text-[11px] text-red-500">
+                  {voteMessage}
+                </p>
+              )}
+            </>
           )}
         </CommentBubble>
-
-        {!isEditing && (
-          <div className="flex items-center gap-4 px-2 mt-1.5">
-            {isOwner && (
-              <>
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-[#6C5CE7] transition-colors"
-                >
-                  <Pencil size={13} />
-                  تعديل
-                </button>
-                <button
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
-                >
-                  <Trash2 size={13} />
-                  {isDeleting ? "جاري الحذف..." : "حذف"}
-                </button>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

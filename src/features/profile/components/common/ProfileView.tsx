@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useProfile from "../../hooks/useProfile";
 import { useAuthStore } from "../../../auth/store/useAuthStore";
 import type { Profile } from "../../types/user/Profile";
@@ -20,16 +21,17 @@ import VaultTab from "../tabs/VaultTab";
 
 type ProfileUI = Profile & {
   votraScore?: string;
-  postsCount?: number;
-  commentsCount?: number;
 };
 
-export default function ProfileView() {
-  const { profile, fetching, error } = useProfile();
-  const [activeTab, setActiveTab] = useState<TabType>("echo");
-  const isOwner = true;
+type Props = {
+  userId?: string;
+};
 
-  // آيدي المستخدم المسجّل دخوله حالياً، من نفس الستور اللي يستخدمه useLogin
+export default function ProfileView({ userId }: Props) {
+  const { profile, fetching, error } = useProfile(userId);
+  const [activeTab, setActiveTab] = useState<TabType>("echo");
+  const navigate = useNavigate();
+
   const currentUserId = useAuthStore((state) => state.user?.id);
 
   if (fetching) {
@@ -51,17 +53,38 @@ export default function ProfileView() {
   const uiProfile: ProfileUI = {
     ...profile,
     votraScore: "0",
-    postsCount: 0,
-    commentsCount: 0,
   };
+
+  const isOwner = !userId || uiProfile.user?.id === currentUserId;
 
   return (
     <div
-      className="min-h-screen bg-[#F4F6FC] px-4 sm:px-6 font-sans flex flex-col"
+      className="min-h-screen bg-[#F4F6FC] px-4 sm:px-6 font-sans flex flex-col relative items-center justify-center"
       dir="rtl"
     >
-      <div className="w-full pt-8 md:pt-10 flex-1 flex flex-col">
+      {/* زر السهم على اليمين في المنتصف تماماً وخارج صندوق البروفايل */}
+      <button
+        onClick={() => navigate("/dashbord")}
+        className="fixed right-6 top-1/2 -translate-y-1/2 z-50 bg-white hover:bg-gray-50 text-gray-700 p-3.5 rounded-full shadow-lg border border-gray-200 transition-all flex items-center justify-center group"
+        title="الرجوع إلى الرئيسية"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 transform group-hover:translate-x-1 transition-transform"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
 
+      <div className="w-full max-w-7xl pt-8 md:pt-10 flex-1 flex flex-col">
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex-1 flex flex-col">
           <div className="grid grid-cols-1 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x lg:divide-x-reverse divide-gray-100 flex-1">
 
@@ -72,21 +95,22 @@ export default function ProfileView() {
                 <ProfileTabs activeTab={activeTab} setActiveTab={setActiveTab} />
                 
                 <div className="flex-1">
-                  {/* ← عرض المكون المناسب بناءً على التاب */}
                   {activeTab === "echo" && uiProfile.user && (
                     <EchoTab
                       profileUserId={uiProfile.user.id}
                       currentUserId={currentUserId}
                     />
                   )}
-                  {activeTab === "nexus" && <NexusTab />}
+                  {activeTab === "nexus" && uiProfile.user && (
+                    <NexusTab profileUserId={uiProfile.user.id} />
+                  )}
                   {activeTab === "vault" && <VaultTab />}
                 </div>
               </div>
             </div>
 
-           <div className="lg:col-span-1 text-right space-y-1">
-              <ProfileStats profile={uiProfile} />
+            <div className="lg:col-span-1 text-right space-y-1">
+              <ProfileStats />
               <ProfileLinks profile={uiProfile} isOwner={isOwner} />
               <ProfileContact profile={uiProfile} isOwner={isOwner} />
               <ProfileSkills skills={uiProfile.skill ?? []} isOwner={isOwner} />

@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Profile, UpdateProfilePayload } from "../../types/user/Profile";
+import { useAuthStore } from "../../../auth/store/useAuthStore";
 
 import { PurpleInput } from "../ui/PurpleInput";
 import { SkillItemComponent } from "../ui/SkillItemComponent";
@@ -44,6 +45,9 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
   const navigate = useNavigate();
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
+  // آيدي المستخدم الحالي، عشان نرجع لبروفايله الصح بعد الحفظ
+  const currentUserId = useAuthStore((state) => state.user?.id);
+
   const [userName, setUserName] = useState(profile.user?.user_name ?? "");
   const [bio, setBio] = useState(profile.bio ?? "");
   const [domain, setDomain] = useState(profile.domain ?? "");
@@ -69,50 +73,58 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
     }
   };
 
-    const onSubmit = async (e: React.FormEvent) => {
+  // مسار بروفايلي الحالي (بعد التعديل أو عند الإلغاء)
+  const ownProfilePath = currentUserId ? `/profile/${currentUserId}` : "/profile";
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // معالجة رابط الدومين لضمان عدم إرسال رابط ناقص أو فارغ يتسبب في خطأ الـ Validation
+    let formattedDomain: string | undefined = undefined;
+    if (domain && domain.trim() !== "") {
+      formattedDomain = domain.startsWith("http") ? domain : `https://${domain}`;
+    }
+
     const res = await handleUpdate({
       user_name: userName || undefined,
-      bio, phone, location, skill: skills,
+      bio, 
+      phone, 
+      location, 
+      skill: skills,
       github: github ? `https://github.com/${github}` : undefined,
       gmail,
-      domain: domain.startsWith("http") ? domain : `https://${domain}`,
+      domain: formattedDomain,
       linkedin: linkedin ? `https://linkedin.com/in/${linkedin}` : undefined,
-      avatar, cv,
+      avatar, 
+      cv,
     });
 
     if (res.status === "success") {
-      navigate("/profile");
+      navigate(ownProfilePath);
     }
   };
 
   return (
     <div className="w-full min-h-screen bg-[#F4F3F8] py-8 px-4 sm:px-6 lg:px-8 text-gray-900" dir="rtl">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white border border-purple-100/80 rounded-3xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-purple-100/85 rounded-3xl shadow-sm overflow-hidden">
           
-          {/* Header */}
-          <div className="p-6 border-b border-purple-100 flex flex-wrap items-center justify-between gap-4">
+          {/* Header (تم الحفاظ على زر الرجوع وعنوان الصفحة فقط بدون أزرار الحفظ) */}
+          <div className="p-6 border-b border-purple-100 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <button type="button" onClick={() => navigate("/profile")} className="w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#6C5CE7] flex items-center justify-center transition-colors">
+              <button type="button" onClick={() => navigate(ownProfilePath)} className="w-10 h-10 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#6C5CE7] flex items-center justify-center transition-colors">
                 <ArrowRight size={20} />
               </button>
               <div>
                 <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">تعديل البروفايل</h1>
               </div>
             </div>
-                        <div className="flex items-center gap-3">
-              <button type="button" onClick={() => navigate("/profile")} className="px-7 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 text-sm font-bold transition-colors">إلغاء</button>
-              <button type="submit" form="profile-form" disabled={loading} className="px-8 py-3 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] disabled:opacity-70 text-white text-sm font-bold shadow-md shadow-purple-200 transition-all">
-                <span>{loading ? "جاري الحفظ..." : "حفظ التغييرات"}</span>
-              </button>
-            </div>
           </div>
 
           {/* Form Body */}
           <form id="profile-form" onSubmit={onSubmit} className="p-6 md:p-8 space-y-8">
             
-                       {/* Avatar & Name */}
+            {/* Avatar & Name */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               <div className="relative shrink-0">
                 <AvatarComponent
@@ -212,7 +224,7 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
                       <Check size={16} />
                     </button>
                   </div>
-                                 ) : (
+                ) : (
                   <button type="button" onClick={() => setIsAddingSkill(true)} className="bg-white hover:bg-purple-50 text-[#6C5CE7] border border-purple-300 hover:border-[#6C5CE7] text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all">
                     <Plus size={15} />
                     <span> إضافة مهارة</span>
@@ -223,6 +235,25 @@ export default function ProfileForm({ profile, loading, error, success, handleUp
 
             {error && <div className="bg-red-50 text-red-600 text-sm font-medium p-3 rounded-xl text-center">{error}</div>}
             {success && <div className="bg-green-50 text-green-600 text-sm font-medium p-3 rounded-xl text-center">{success}</div>}
+            
+            {/* ── أزرار الحفظ والإلغاء في الأسفل ── */}
+            <div className="pt-6 border-t border-purple-100 flex items-center justify-end gap-3">
+              <button 
+                type="button" 
+                onClick={() => navigate(ownProfilePath)} 
+                className="px-7 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 text-sm font-bold transition-colors"
+              >
+                إلغاء
+              </button>
+              <button 
+                type="submit" 
+                disabled={loading} 
+                className="px-8 py-3 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] disabled:opacity-70 text-white text-sm font-bold shadow-md shadow-purple-200 transition-all"
+              >
+                <span>{loading ? "جاري الحفظ..." : "حفظ التغييرات"}</span>
+              </button>
+            </div>
+
           </form>
         </div>
       </div>

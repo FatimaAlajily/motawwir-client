@@ -5,7 +5,7 @@ import type { PostType } from "../types/common/PostType";
 import type { PostPagination } from "../types/forms/PostPagination";
 
 const useFetchPosts = (
-  type: PostType,
+  type: PostType | undefined,
   page: number = 1,
   search: string = ""
 ) => {

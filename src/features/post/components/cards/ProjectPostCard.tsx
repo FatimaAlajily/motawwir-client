@@ -4,7 +4,8 @@ import { FaGithub } from "react-icons/fa";
 import type { ProjectPost } from "../../types/kinds/ProjectPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-
+import { usePostComments } from "../../hooks/usePostComments";
+import CommentSection from "../../../comment/components/common/CommentSection";
 type ProjectPostCardProps = {
   post: ProjectPost;
   deleteAction?: ReactNode;
@@ -13,10 +14,14 @@ type ProjectPostCardProps = {
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const ProjectPostCard = ({ post, deleteAction , isOwner}: ProjectPostCardProps) => {
+const ProjectPostCard = ({
+  post,
+  deleteAction,
+  isOwner,
+}: ProjectPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-    const [votes, setVotes] = useState(post.votes);
-
+  const comments = usePostComments(post.id);
+  const [votes, setVotes] = useState(post.votes);
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -34,6 +39,7 @@ const ProjectPostCard = ({ post, deleteAction , isOwner}: ProjectPostCardProps) 
     >
       {/* -------- Header -------- */}
       <PostHeader
+        postId={post.id}
         avatar={post.user.avatar}
         userName={post.user.user_name}
         createdAt={post.created_at}
@@ -134,14 +140,24 @@ const ProjectPostCard = ({ post, deleteAction , isOwner}: ProjectPostCardProps) 
 
       <hr className="border-gray-100 mb-1.5" />
       <PostFooter
-      postId={post.id}
+        commentsLabel="التعليقات"
+        onCommentsClick={comments.toggle}
+        postId={post.id}
         upvotes={votes.upvotes}
         downvotes={votes.downvotes}
         ai={votes.ai}
-        commentsLabel="الأجوبة"
         onVoteSuccess={setVotes}
         isOwner={isOwner}
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

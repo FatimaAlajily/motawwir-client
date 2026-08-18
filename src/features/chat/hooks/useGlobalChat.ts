@@ -36,7 +36,6 @@ const useChatMessages = () => {
 
     channel.listen(".message.sent", (event: Message) => {
       setMessages((prev) => {
-        // ✅ منع التكرار: لا تضف الرسالة إذا كانت موجودة بالفعل (بناءً على الـ ID)
         if (prev.some((m) => m.id === event.id)) return prev;
         return [...prev, event];
       });

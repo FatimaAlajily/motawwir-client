@@ -2,6 +2,8 @@ import { useState, type ReactNode } from "react";
 import type { WorkPost } from "../../types/kinds/WorkPost";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
+import { usePostComments } from "../../hooks/usePostComments";
+import CommentSection from "../../../comment/components/common/CommentSection";
 
 type WorkPostCardProps = {
   post: WorkPost;
@@ -11,10 +13,10 @@ type WorkPostCardProps = {
 
 const VISIBLE_SKILLS_COUNT = 3;
 
-const WorkPostCard = ({ post, deleteAction , isOwner}: WorkPostCardProps) => {
+const WorkPostCard = ({ post, deleteAction, isOwner }: WorkPostCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const comments = usePostComments(post.id);
   const [votes, setVotes] = useState(post.votes);
-
 
   const visibleSkills = isExpanded
     ? post.skill
@@ -28,20 +30,13 @@ const WorkPostCard = ({ post, deleteAction , isOwner}: WorkPostCardProps) => {
       className="bg-white border border-gray-100 rounded-xl p-2.5 shadow-sm hover:shadow-md transition-shadow w-full overflow-hidden"
       style={{ fontFamily: "Tajawal" }}
     >
-      {/* -------- Header -------- */}
+      {/* -------- Header (showBookmark يتفعّل تلقائياً بدون ما نمرره، عشان WorkPostCard ما كان فيه زر حفظ أصلاً) -------- */}
       <PostHeader
+        postId={post.id}
         avatar={post.user.avatar}
         userName={post.user.user_name}
         createdAt={post.created_at}
-        extraAction={
-          <>
-            {deleteAction}
-            <button
-              type="button"
-              className="text-gray-400 hover:text-[#6620F3] transition-colors p-0.5"
-            ></button>
-          </>
-        }
+        extraAction={deleteAction}
       />
 
       {/* -------- Title -------- */}
@@ -149,15 +144,25 @@ const WorkPostCard = ({ post, deleteAction , isOwner}: WorkPostCardProps) => {
       <hr className="border-gray-100 mt-1.5 mb-1.5" />
 
       {/* -------- Footer -------- */}
-     <PostFooter
-      postId={post.id}
+      <PostFooter
+        postId={post.id}
         upvotes={votes.upvotes}
         downvotes={votes.downvotes}
         ai={votes.ai}
-        commentsLabel="الأجوبة"
+        commentsLabel="التعليقات"
         onVoteSuccess={setVotes}
         isOwner={isOwner}
+        onCommentsClick={comments.toggle}
       />
+      {comments.show && (
+        <>
+          <hr className="border-gray-100 my-2" />
+          <CommentSection
+            target={comments.target}
+            currentUserId={comments.currentUserId}
+          />
+        </>
+      )}
     </div>
   );
 };

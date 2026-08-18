@@ -1,7 +1,10 @@
+import { useParams } from "react-router-dom";
 import ProfileView from "../components/common/ProfileView";
 
 const ProfilePage = () => {
-  return <ProfileView />;
+  const { id } = useParams<{ id: string }>();
+
+  return <ProfileView userId={id} />;
 };
 
 export default ProfilePage;

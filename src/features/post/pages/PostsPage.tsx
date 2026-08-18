@@ -8,9 +8,18 @@ import EditPostModal from "../components/ui/EditPostModal";
 import { usePostSearchStore } from "../../../shared/store/usePostSearchStore";
 import useDebouncedValue from "../../../shared/hooks/useDebouncedValue";
 import Pagination from "../components/inputs/Pagination";
-import LOADING_IMAGE from "../../../assets/images/rabitloadingsearch.png";
-import NO_RESULTS_IMAGE from "../../../assets/images/noresultfound.png";
+import LOADING_IMAGE from "../../../assets/images/searching.png";
+import NO_RESULTS_IMAGE from "../../../assets/images/NotFound.png";
 import SkeletonCard from "../components/loading/SkeletonCard";
+import ProjectCardSkeleton from "../components/loading/ProjectCardSkeleton";
+import TeamCardSkeleton from "../components/loading/TeamCardSkeleton";
+const SKELETON_COL_SPAN: Record<PostType, string> = {
+  question: "col-span-6",
+  work: "col-span-6",
+  new: "col-span-6",
+  project: "col-span-6 md:col-span-3",
+  team: "col-span-6 md:col-span-3 lg:col-span-2",
+};
 
 const PostsPage = () => {
   const { type } = useParams<{ type: string }>();
@@ -46,17 +55,37 @@ const PostsPage = () => {
     setEditingPost(null);
   }
 
-  if (error) {
-    return <p className="text-center text-red-500 py-10">{error}</p>;
+  function renderSkeleton(index: number) {
+    const spanClass = SKELETON_COL_SPAN[validType] || "col-span-6";
+
+    let skeleton = <SkeletonCard />;
+    if (validType === "project") skeleton = <ProjectCardSkeleton />;
+    if (validType === "team") skeleton = <TeamCardSkeleton />;
+
+    return (
+      <div key={index} className={spanClass}>
+        {skeleton}
+      </div>
+    );
   }
 
   if (error) {
-    return <p className="text-center text-red-500 py-10">{error}</p>;
+    return (
+      <p
+        className="text-center text-red-500 py-10"
+        style={{ fontFamily: "'Tajawal', sans-serif" }}
+      >
+        {error}
+      </p>
+    );
   }
 
   if (loading && isSearching) {
     return (
-      <div className="flex flex-col items-center justify-center h-full py-20">
+      <div
+        className="flex flex-col items-center justify-center h-full py-20"
+        style={{ fontFamily: "'Tajawal', sans-serif" }}
+      >
         <img
           src={LOADING_IMAGE}
           alt="جاري البحث"
@@ -67,17 +96,12 @@ const PostsPage = () => {
     );
   }
 
-  // if (posts.length === 0) {
-  //   return (
-  //     <p className="text-center text-gray-400 py-10">
-  //       لا توجد منشورات في هذا القسم حتى الآن
-  //     </p>
-  //   );
-  // }
-
   if (!loading && posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full py-20">
+      <div
+        className="flex flex-col items-center justify-center h-full py-20"
+        style={{ fontFamily: "'Tajawal', sans-serif" }}
+      >
         <img
           src={NO_RESULTS_IMAGE}
           alt="لا توجد نتائج"
@@ -94,11 +118,12 @@ const PostsPage = () => {
 
   return (
     <>
-      <div className="grid grid-cols-6 gap-4 ">
+      <div
+        className="grid grid-cols-6 gap-4"
+        style={{ fontFamily: "'Tajawal', sans-serif" }}
+      >
         {loading && !isSearching
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <SkeletonCard key={index} />
-            ))
+          ? Array.from({ length: 6 }).map((_, index) => renderSkeleton(index))
           : posts.map((post) => (
               <PostCard
                 key={post.id}

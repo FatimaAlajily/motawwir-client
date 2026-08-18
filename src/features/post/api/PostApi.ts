@@ -45,6 +45,7 @@ export async function getPostsRequest(params?: {
   type?: PostType;
   search?: string;
   page?: number;
+  user_id?: number; // فلترة منشورات مستخدم معيّن (تستخدم بتاب "آخر المنشورات" بالبروفايل)
 }): Promise<PostPagination<Post> | { status: "error"; message: string }> {
   try {
     const response = await axiosClient.get<PostPagination<Post>>("posts", {
@@ -112,6 +113,19 @@ export async function deletePostRequest(
 ): Promise<ApiResponse<null>> {
   try {
     const response = await axiosClient.delete<ApiSuccess<null>>(`posts/${id}`);
+    return response.data;
+  } catch (error) {
+    return HandleApiError(error);
+  }
+}
+
+export async function forceDeletePostRequest(
+  id: number
+): Promise<ApiResponse<{ id: number }>> {
+  try {
+    const response = await axiosClient.delete<ApiSuccess<{ id: number }>>(
+      `admin/moderation/posts/${id}`
+    );
     return response.data;
   } catch (error) {
     return HandleApiError(error);

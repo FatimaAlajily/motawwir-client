@@ -1,6 +1,6 @@
+import type { VoteDetails } from "../../../../shared/types/VoteDetails";
 export type CommentType = "post" | "profile";
 
-// نفس منطق StoreCommentRequest: post_id مطلوب لنوع post، profile_user_id مطلوب لنوع profile
 export type CommentTarget =
   | { type: "post"; post_id: number }
   | { type: "profile"; profile_user_id: number };
@@ -11,12 +11,11 @@ export type CommentUser = {
   avatar: string | null;
 };
 
-// شكل VoteResource غير معروف بالكامل من الباك اند المرسل، لذا الحقول اختيارية
-export type CommentVotes = {
-  likes_count?: number;
-  dislikes_count?: number;
-  user_vote?: "like" | "dislike" | null;
-};
+// export type CommentVotes = {
+//   upvotes?: number;
+//   downvotes?: number;
+//   ai_votes?: number;
+// };
 
 export type Comment = {
   id: number;
@@ -24,7 +23,7 @@ export type Comment = {
   type: CommentType;
   created_at: string;
   user: CommentUser;
-  votes: CommentVotes;
+  votes: VoteDetails;
 };
 
 export type CreateCommentPayload = CommentTarget & {
@@ -49,8 +48,6 @@ export type PaginationLinks = {
   next: string | null;
 };
 
-// شكل paginate() اللي تلفه CommentResource::collection() تلقائياً —
-// جعلناه يقبل الشكلين لأن بعض إعدادات Laravel (withoutWrapping) تشيل التغليف الإضافي
 export type PaginatedComments =
   | Comment[]
   | {
@@ -59,7 +56,6 @@ export type PaginatedComments =
       meta?: PaginationMeta;
     };
 
-// يوحّد الشكلين إلى نفس الصيغة عشان useComments ما ينكسر مهما كان شكل الرد
 export function normalizePaginatedComments(payload: PaginatedComments): {
   items: Comment[];
   meta: PaginationMeta | null;

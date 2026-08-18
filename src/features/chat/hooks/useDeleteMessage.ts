@@ -1,15 +1,23 @@
 import { useState } from "react";
-import { deleteMessageRequest } from "../api/ChatApi";
+import {
+  deleteMessageRequest,
+  forceDeleteMessageRequest,
+} from "../api/ChatApi";
 
 const useDeleteMessage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleDelete(id: number): Promise<boolean> {
+  async function handleDelete(
+    id: number,
+    asAdmin: boolean = false
+  ): Promise<boolean> {
     setLoading(true);
     setError("");
 
-    const response = await deleteMessageRequest(id);
+    const response = asAdmin
+      ? await forceDeleteMessageRequest(id)
+      : await deleteMessageRequest(id);
 
     setLoading(false);
 
