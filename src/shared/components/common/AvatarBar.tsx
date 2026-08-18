@@ -12,7 +12,6 @@ const AvatarBar = () => {
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
 
-  // إذا لم يكن هناك مستخدم مسجل (زائر)، يمكنك إخفاء الأفاتار أو إظهار زر تسجيل الدخول
   if (!user) {
     return (
       <button
@@ -57,11 +56,11 @@ const AvatarBar = () => {
         حساب المستخدم
       </DropdownItem>
 
-      <DropdownItem 
+      <DropdownItem
         className="text-red-600"
         onClick={() => {
           useAuthStore.getState().logout();
-          navigate("/login");
+          navigate("/");
         }}
       >
         تسجيل الخروج
